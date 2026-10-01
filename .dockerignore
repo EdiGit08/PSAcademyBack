@@ -1,0 +1,50 @@
+# Todo lo que no forma parte del binario debe quedarse fuera del contexto de
+# build: acorta el contexto enviado a BuildKit y, sobre todo, evita que un
+# artefacto local o un secreto quede copiado en una capa intermedia.
+
+# Artefactos de compilacion (los reconstruye el SDK dentro de la imagen)
+**/bin/
+**/obj/
+**/out/
+
+# Secretos de desarrollo local. Ninguno debe llegar a una imagen, y .env esta
+# en el .gitignore, pero el contexto se arma desde el disco, no desde git.
+**/user-secrets/
+**/*.user
+**/.env
+**/.env.*
+**/*.pfx
+**/*.p12
+**/*.key
+**/secrets.json
+**/appsettings.Local.json
+
+# El contenedor de Piston es una pieza de infraestructura, no parte de la API:
+# no tiene sentido enviarlo al build de .NET.
+docker-compose*.yml
+
+# Artefactos de despliegue generados en otros proveedores
+render.yaml
+Procfile
+
+# Control de versiones y editores
+.git/
+.gitignore
+.gitattributes
+.github/
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.sw?
+
+# Documentacion y scripts que no afectan al binario
+docs/
+*.md
+.dockerignore
+Dockerfile
+
+# Sistema operativo
+**/.DS_Store
+**/Thumbs.db

@@ -94,17 +94,38 @@ public class AuthController : ControllerBase
             });
         }
 
-        // El registro público nunca puede asignar roles: el valor es fijo "user".
+        // El registro público nunca puede pedir un rol: el cliente no elige. El único
+        // caso en el que se concede Admin es la PRIMERA alta de la vida de la base de
+        // datos, para que exista alguien que pueda entrar al panel y cargar el curso.
+        //
+        // En producción no se crea ningún admin por semilla (DbSeeder está bloqueado a
+        // Development porque genera admin@psacademy.com con contraseña conocida), así
+        // que "el primero que se registra es el admin" es el mecanismo de arranque.
+        //
+        // La comprobación es un SELECT sin bloqueo: dos registros simultáneos sobre una
+        // base vacía podrían obtener los dos rol Admin. Se acepta a propósito, porque
+        // la consecuencia es inocua (dos administradores) y el escenario exige que dos
+        // personas se registren en el mismo instante sobre una base recién creada.
+        var isFirstUser = !await _dbContext.Users.AnyAsync(cancellationToken);
+
         var user = new User
         {
             Email = email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, workFactor: 11),
-            Role = UserRole.User,
+            Role = isFirstUser ? UserRole.Admin : UserRole.User,
             CreatedAt = DateTime.UtcNow
         };
 
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (isFirstUser)
+        {
+            _logger.LogWarning(
+                "Primer usuario de la base de datos ({UserId}) registrado con rol Admin. " +
+                "Las siguientes altas se crean con rol User.",
+                user.Id);
+        }
 
         _logger.LogInformation("Usuario registrado con id {UserId}", user.Id);
 

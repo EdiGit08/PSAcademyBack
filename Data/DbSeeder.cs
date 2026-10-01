@@ -10,12 +10,30 @@ public static class DbSeeder
     private const string DefaultAdminPassword = "Admin123!";
 
     /// <summary>
-    /// Siembra datos mínimos para que la API sea usable en desarrollo.
+    /// Siembra de desarrollo: admin con contraseña conocida + datos de referencia.
     /// Nunca debe invocarse en producción.
     /// </summary>
-    public static async Task SeedAsync(ApplicationDbContext dbContext, ILogger logger)
+    public static async Task SeedDevelopmentAsync(ApplicationDbContext dbContext, ILogger logger)
     {
         await SeedAdminAsync(dbContext, logger);
+        await SeedReferenceDataAsync(dbContext, logger);
+    }
+
+    /// <summary>
+    /// Datos de referencia sin datos sensibles: es idempotente y NO crea usuarios,
+    /// por lo que es segura en producción.
+    ///
+    /// Sin filas en "languages" el endpoint /execute siempre respondería 400,
+    /// porque valida el slug contra esa tabla; sin "categories" el catálogo del
+    /// alumno quedaría vacío. Esta siembra es la razón por la que el primer
+    /// arranque en Render deja la aplicación usable sin intervención manual.
+    ///
+    /// Los 30 ejercicios del primer entregable NO se siembran aquí a propósito:
+    /// se dan de alta desde el panel de administración para no acoplar el
+    /// contenido del curso al esquema de la API.
+    /// </summary>
+    public static async Task SeedReferenceDataAsync(ApplicationDbContext dbContext, ILogger logger)
+    {
         await SeedLanguagesAsync(dbContext, logger);
         await SeedCategoriesAsync(dbContext, logger);
     }

@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.20" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.17.12" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.15">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

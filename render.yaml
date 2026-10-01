@@ -1,0 +1,168 @@
+# Blueprint de Render para el backend de PSAcademy.
+#
+# Este archivo crea un Web Service basado en Docker a partir del Dockerfile de este
+# mismo directorio. La base de datos NO se declara aqui: es Neon (PostgreSQL
+# serverless) y se conecta solo por cadena de conexión.
+#
+# Uso: en Render, New > Blueprint, apuntar a este repositorio y elegir este
+# archivo. Render creara el servicio y aplicara los valores declarados.
+#
+#   https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: psacademy-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+
+    # Plan gratuito. Aviso importante sobre este plan:
+    #   - La instancia se apaga tras 15 min sin tráfico y tarda unos minutos en
+    #     arrancar de nuevo. La primera petición del alumno tras ese reposo paga esa
+    #     espera, y las migraciones del arranque también.
+    #   - Pasa a "starter" cuando el proyecto deje de ser una prueba: el apagado
+    #     automático desaparece y el despliegue mantiene instancias vivas.
+    plan: free
+    region: oregon
+    branch: main
+
+    # Una sola instancia. Con varias, cada arranque ejecutaria las migraciones y la
+    # siembra a la vez: MigrateAsync es idempotente y espera al bloqueo de PostgreSQL,
+    # pero el tiempo de arranque se multiplica sin ganar nada con este tamano.
+    numInstances: 1
+
+    autoDeploy: true
+
+    # Render sondea esta ruta para decidir si la instancia recibe trafico. Se
+    # apunta al liveness y no al readiness a proposito: si comprobara la base de
+    # datos, un Neon suspendido un instante sacaria el servicio de rotacion en vez
+    # de degradarse solo. El diagnostico de base de datos esta en /health/ready.
+    healthCheckPath: /health/live
+
+    envVars:
+      # ------------------------------------------------------------- Runtime
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+
+      # Render espera el trafico en $PORT y solo publica la URL si el proceso
+      # escucha en 0.0.0.0. ASPNETCORE_HTTP_PORTS (en el Dockerfile) fija el 8080,
+      # asi que aqui se declara el mismo puerto para que ambos coincidan.
+      - key: PORT
+        value: 8080
+
+      # --------------------------------------------------------- Neon / base
+      # sync: false = Render NO guarda el valor en este archivo: hay que pegarlo en
+      # el panel (Environment) en el momento del primer despliegue.
+      #
+      # Pegar la cadena "Pooled connection" de Neon, NO la directa: la pooled
+      # mantiene un pooler delante de la base y sobrevive a la suspension de la
+      # computation, que es justo lo que ocurre en un plan serverless.
+      #
+      # Debe terminar en ";sslmode=require" (Neon lo anade por defecto) e incluir
+      # ";Pooling=true" para aprovechar el pooler de Npgsql.
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+
+      # --------------------------------------------------------------- JWT
+      # Clave de firma HMAC-SHA256. Minimo 32 caracteres: la aplicacion valida el
+      # tamano al arrancar y se niega a firmar con una clave debil o publicada.
+      #
+      # Generar una con:  openssl rand -base64 48
+      # Guardarla en Render es lo unico que impide que alguien falsifique tokens
+      # de administrador.
+      - key: Jwt__SecretKey
+        sync: false
+
+      - key: Jwt__Issuer
+        value: PSAcademyBack
+
+      - key: Jwt__Audience
+        value: PSAcademyBackClient
+
+      # 60 minutos: es el limite de vida del token que el front guarda en
+      # localStorage. Al expirar, el interceptor de axios de la SPA limpia la sesion
+      # y redirige a /login.
+      - key: Jwt__ExpirationMinutes
+        value: 60
+
+      # ----------------------------------------------------------- Esquema
+      # Se aplican migraciones y se siembran idiomas y categorias al arrancar.
+      # Ambas operaciones son idempotentes, asi que un redeploy las repite sin
+      # alterar nada. Ponerlo en false permite que las migraciones corran desde un
+      # "pre-deploy command" en vez de en el arranque.
+      - key: Database__ApplyMigrationsOnStartup
+        value: "true"
+
+      - key: Database__SeedReferenceDataOnStartup
+        value: "true"
+
+      # Neon suspende la computation tras un periodo de inactividad. Estos valores
+      # dan margen al primer comando tras reanudar y reintentan ante fallos
+      # transitorios, en lugar de servir un 500 al alumno.
+      - key: Database__CommandTimeoutSeconds
+        value: 60
+
+      - key: Database__MaxRetryCount
+        value: 6
+
+      - key: Database__RetryDelaySeconds
+        value: 10
+
+      - key: Database__MigrationMaxAttempts
+        value: 8
+
+      # -------------------------------------------------------------- CORS
+      # El frontend vive en Vercel, un dominio distinto, asi que el navegador exige
+      # CORS. Declarar la lista exacta evita que cualquier sitio pueda llamar a la
+      # API con los tokens de los alumnos.
+      #
+      # El formato de los indices es el de .NET para colecciones en variables de
+      # entorno: se antepone el indice con "__" al nombre de la seccion.
+      #
+      # Poner aqui el dominio de Vercel SIN barra final, por ejemplo:
+      #   - key: Cors__AllowedOrigins__0
+      #     value: https://psacademy.vercel.app
+      #
+      # Si el proyecto de Vercel tiene dominio propio, añadirlo como "__1".
+      # Con la lista vacia la aplicacion responde con AllowAnyOrigin: la API
+      # funciona, pero cualquier origen puede invocarla.
+      - key: Cors__AllowedOrigins__0
+        sync: false
+
+      # ------------------------------------------------------------- HTTPS
+      # Activa HSTS y la redireccion a HTTPS. Es seguro detras de Render porque
+      # UseForwardedHeaders ya hace que la peticion se vea como https y no se
+      # genere ninguna redireccion. Ponerlo en false solo para un proxy local sin TLS.
+      - key: Https__Enabled
+        value: "true"
+
+      # ----------------------------------------------------------- Piston
+      # Sin esto, /execute devuelve 502 a todos los alumnos: Render no admite
+      # contenedores con privilegios, y Piston los necesita para aislar el codigo
+      # de cada alumno, asi que no puede convivir con la API en este servicio.
+      #
+      # Dos caminos sin coste, en orden de preferencia:
+      #   1. Instancia propia de Piston (docker-compose.yml de este repositorio) en
+      #      un equipo Linux cualquiera. Poner aqui "http://<host>:2000/api/v2/".
+      #      Si el ejecutor se expone por HTTPS, cambiar http por https.
+      #   2. La instancia publica, si se obtiene una clave autorizada. Desde el
+      #      15/02/2026 no es de acceso abierto: sin Piston__ApiKey responde 401 y
+      #      todo /execute falla con 502.
+      #
+      # Poner aqui la URL base. Sync: false porque depende de donde se aloje.
+      - key: Piston__BaseUrl
+        sync: false
+
+      # Solo para el caso 2. Vacio si se usa una instancia propia.
+      # Se envia como cabecera Authorization, que es lo que espera la instancia publica.
+      - key: Piston__ApiKey
+        sync: false
+
+      # Debe estar alineado con PISTON_LIMIT_OVERRIDES de docker-compose.yml: si
+      # Piston corta antes que la API, el alumno ve "excedio el tiempo limite" en
+      # lugar de un 502 de infraestructura.
+      - key: Piston__TimeoutSeconds
+        value: 15
+
+      - key: Piston__MaxOutputLength
+        value: 8000
