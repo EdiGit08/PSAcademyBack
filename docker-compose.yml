@@ -1,0 +1,27 @@
+# Piston autoalojado para el ejecutor de código de PS Academy.
+#
+# La instancia pública (emkc.org) pasó a ser solo-whitelist y devuelve HTTP 401,
+# por eso el ejecutor usa este contenedor local.
+#
+# PISTON_LIMIT_OVERRIDES es obligatorio: los límites por defecto del runtime
+# (run_timeout 3s, run_cpu_time 3s) hacen que incluso un "System.out.println" en
+# Java agote la CPU durante el arranque de la JVM y falle con "Time limit exceeded".
+# Los valores deben ir alineados con "Piston:TimeoutSeconds" del backend.
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston:latest
+    container_name: piston
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "2000:2000"
+    volumes:
+      - piston_data:/piston
+    environment:
+      PISTON_LIMIT_OVERRIDES: '{"python":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"java":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"javascript":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"csharp":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"c":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"c++":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000}}'
+
+volumes:
+  # "name" fija el volumen al ya existente para no perder los runtimes instalados
+  # (python, java, javascript, csharp, c, c++) al recrear el contenedor.
+  piston_data:
+    name: piston_data
