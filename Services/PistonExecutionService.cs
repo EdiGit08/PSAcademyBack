@@ -16,24 +16,29 @@ public class PistonExecutionService : IPistonExecutionService
     ///
     /// "pseint" no existe como runtime en Piston: se traduce a Python con
     /// <see cref="PSeintTranslator"/> antes de enviarlo.
+    ///
+    /// Los lenguajes compilados se envían SIN extensión porque Piston añade la
+    /// suya: mandar "Main.java" compila bien, pero cualquier error sale como
+    /// "Main.java.java:1: error", que al alumno le parece un fallo del ejecutor.
+    /// Los interpretados (python, javascript...) sí usan el nombre tal cual.
     /// </summary>
     private static readonly Dictionary<string, (string PistonLanguage, string FileName)> SupportedLanguages =
         new(StringComparer.OrdinalIgnoreCase)
         {
             ["python"] = ("python", "main.py"),
             ["pseint"] = ("python", "main.py"),
-            ["java"] = ("java", "Main.java"),
+            ["java"] = ("java", "Main"),
             ["javascript"] = ("javascript", "main.js"),
             ["typescript"] = ("typescript", "index.ts"),
-            ["csharp"] = ("csharp", "main.cs"),
-            ["c"] = ("c", "main.c"),
-            ["cpp"] = ("c++", "main.cpp"),
-            ["kotlin"] = ("kotlin", "main.kt"),
-            ["go"] = ("go", "main.go"),
-            ["rust"] = ("rust", "main.rs"),
+            ["csharp"] = ("csharp", "Program"),
+            ["c"] = ("c", "main"),
+            ["cpp"] = ("c++", "main"),
+            ["kotlin"] = ("kotlin", "Main"),
+            ["go"] = ("go", "main"),
+            ["rust"] = ("rust", "main"),
             ["ruby"] = ("ruby", "main.rb"),
             ["php"] = ("php", "main.php"),
-            ["swift"] = ("swift", "main.swift")
+            ["swift"] = ("swift", "main")
         };
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
