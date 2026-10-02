@@ -37,26 +37,54 @@ if (!email || !password) {
   process.exit(1);
 }
 
-async function api(path, { token, method = "GET", body } = {}) {
-  const response = await fetch(`${apiUrl}${path}`, {
-    method,
-    headers: {
-      ...(body ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
+async function api(path, { token, method = "GET", body, attempts = 5 } = {}) {
+  // Render apaga la instancia tras 15 min sin trafico y el primer request paga el
+  // arranque, ademas de los despliegues. Se reintenta ante 5xx o respuestas que no
+  // son JSON (la pagina de mantenimiento de Render) en lugar de abortar la siembra.
+  let lastError;
 
-  const text = await response.text();
-  const payload = text ? JSON.parse(text) : null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    let response;
+    let text;
 
-  if (!response.ok) {
-    const detail = payload?.detail ?? payload?.title ?? text;
-    throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
+    try {
+      response = await fetch(`${apiUrl}${path}`, {
+        method,
+        headers: {
+          ...(body ? { "Content-Type": "application/json" } : {}),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        ...(body ? { body: JSON.stringify(body) } : {}),
+      });
+      text = await response.text();
+    } catch (networkError) {
+      lastError = new Error(`${method} ${path} -> ${networkError.message}`);
+      await sleep(attempt * 3_000);
+      continue;
+    }
+
+    const isJson = text.trimStart().startsWith("{") || text.trimStart().startsWith("[");
+
+    if (response.ok && isJson) {
+      return text ? JSON.parse(text) : null;
+    }
+
+    const snippet = text.replace(/\s+/g, " ").slice(0, 160);
+    lastError = new Error(`${method} ${path} -> ${response.status}: ${snippet || "(vacio)"}`);
+
+    const transient = response.status >= 500 || !isJson;
+    if (!transient || attempt === attempts) {
+      throw lastError;
+    }
+
+    console.log(`  (reintento ${attempt}/${attempts}: ${lastError.message})`);
+    await sleep(attempt * 5_000);
   }
 
-  return payload;
+  throw lastError;
 }
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const token = (await api("/api/auth/login", { method: "POST", body: { email, password } })).token;
 
