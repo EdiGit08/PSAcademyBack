@@ -18,10 +18,13 @@ services:
     volumes:
       - piston_data:/piston
     environment:
-      PISTON_LIMIT_OVERRIDES: '{"python":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"java":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"javascript":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"csharp":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"c":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"c++":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000}}'
+      # Solo python y java: son los únicos runtimes que usa la academia (PSeint se
+      # traduce a Python antes de enviarse). Los overrides de los demás no hacen daño,
+      # pero son ruido e invitan a reintroducir un lenguaje que el backend ya no acepta.
+      PISTON_LIMIT_OVERRIDES: '{"python":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000},"java":{"run_timeout":15000,"run_cpu_time":15000,"compile_timeout":15000,"compile_cpu_time":15000}}'
 
 volumes:
   # "name" fija el volumen al ya existente para no perder los runtimes instalados
-  # (python, java, javascript, csharp, c, c++) al recrear el contenedor.
+  # (python y java) al recrear el contenedor.
   piston_data:
     name: piston_data

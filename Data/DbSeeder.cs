@@ -69,9 +69,10 @@ public static class DbSeeder
     /// Sin filas en languages el endpoint /execute siempre respondería 400,
     /// porque valida el slug contra esta tabla.
     ///
-    /// El primer entregable expone únicamente Python, Java y PSeint. Los demás
-    /// lenguajes se mantienen en la tabla (sus plantillas históricas siguen vivas)
-    /// pero se marcan inactivos para que dejen de aparecer a los alumnos.
+    /// La academia expone únicamente Python, Java y PSeint. Los lenguajes fuera de
+    /// ese alcance se BORRAN, no solo se desactivan: su código no se puede ejecutar
+    /// (el ejecutor los rechaza), pero sus plantillas y borradores siguen ocupando
+    /// filas y un admin vería languages inactivos como si fueran una opción válida.
     /// </summary>
     private static async Task SeedLanguagesAsync(ApplicationDbContext dbContext, ILogger logger)
     {
@@ -95,18 +96,40 @@ public static class DbSeeder
             dbContext.Languages.AddRange(missing);
         }
 
-        // Desactiva cualquier lenguaje fuera del alcance del entregable.
-        foreach (var language in existing.Where(l => !supportedSlugs.Contains(l.Slug) && l.IsActive))
+        var outOfScope = existing
+            .Where(l => !supportedSlugs.Contains(l.Slug))
+            .Select(l => l.Id)
+            .ToList();
+
+        // El borrado va en cascada manual y en este orden porque las FK son Restrict:
+        // primero los borradores de código, luego las plantillas de ejercicios y por
+        // último la fila del lenguaje. (UserProgress.LastSubmittedLanguageId es
+        // OnDelete(SetNull), no estorba.)
+        var purgedDrafts = 0;
+        var purgedTemplates = 0;
+
+        if (outOfScope.Count > 0)
         {
-            language.IsActive = false;
+            purgedDrafts = await dbContext.UserCodeDrafts
+                .Where(d => outOfScope.Contains(d.LanguageId))
+                .ExecuteDeleteAsync();
+
+            purgedTemplates = await dbContext.ExerciseTemplates
+                .Where(t => outOfScope.Contains(t.LanguageId))
+                .ExecuteDeleteAsync();
+
+            await dbContext.Languages
+                .Where(l => outOfScope.Contains(l.Id))
+                .ExecuteDeleteAsync();
         }
 
-        if (missing.Count > 0 || dbContext.ChangeTracker.HasChanges())
+        if (missing.Count > 0 || outOfScope.Count > 0)
         {
             await dbContext.SaveChangesAsync();
             logger.LogInformation(
-                "Lenguajes iniciales sembrados: {Added}. Lenguajes fuera de alcance desactivados.",
-                missing.Count);
+                "Lenguajes iniciales sembrados: {Added}. Fuera de alcance eliminados: {Purged} "
+                + "(junto con {Drafts} borradores y {Templates} plantillas de esos lenguajes).",
+                missing.Count, outOfScope.Count, purgedDrafts, purgedTemplates);
         }
     }
 

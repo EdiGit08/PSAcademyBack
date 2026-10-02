@@ -9,36 +9,26 @@ public class PistonExecutionService : IPistonExecutionService
     /// <summary>
     /// Slugs de la aplicación traducidos al nombre de runtime que espera el ejecutor.
     ///
-    /// Estos son los nombres CANÓNICOS que devuelve GET /api/v2/runtimes.
-    /// Los alias (gcc, cpp, g++, mono, node-js...) también se aceptan, pero ojo: "gcc"
-    /// es alias de "c", no de "c++", así que usarlo compilaría C++ como C y fallaría
-    /// con errores confusos en lugar de un "lenguaje no soportado".
+    /// Son los nombres CANÓNICOS que devuelve GET /api/v2/runtimes, y la lista es
+    /// cerrada a propósito: la academia solo enseña Python, Java y pseudocódigo
+    /// (PSeint). Aceptar alias como "gcc" o "node-js" no costaba nada aquí, pero
+    /// cada runtime que vive en el servidor del ejecutor consume RAM y disco para
+    /// todos, y dejar pasar un slug caducado acaba en un "lenguaje no soportado"
+    /// sobre ejercicios que todavía están publicados.
     ///
     /// "pseint" no existe como runtime en Piston: se traduce a Python con
     /// <see cref="PSeintTranslator"/> antes de enviarlo.
     ///
-    /// Los lenguajes compilados se envían SIN extensión porque Piston añade la
-    /// suya: mandar "Main.java" compila bien, pero cualquier error sale como
-    /// "Main.java.java:1: error", que al alumno le parece un fallo del ejecutor.
-    /// Los interpretados (python, javascript...) sí usan el nombre tal cual.
+    /// Los compilados se envían SIN extensión porque Piston añade la suya: mandar
+    /// "Main.java" compila bien, pero cualquier error sale como "Main.java.java:1:
+    /// error", que al alumno le parece un fallo del ejecutor. Python sí la lleva.
     /// </summary>
     private static readonly Dictionary<string, (string PistonLanguage, string FileName)> SupportedLanguages =
         new(StringComparer.OrdinalIgnoreCase)
         {
             ["python"] = ("python", "main.py"),
             ["pseint"] = ("python", "main.py"),
-            ["java"] = ("java", "Main"),
-            ["javascript"] = ("javascript", "main.js"),
-            ["typescript"] = ("typescript", "index.ts"),
-            ["csharp"] = ("csharp", "Program"),
-            ["c"] = ("c", "main"),
-            ["cpp"] = ("c++", "main"),
-            ["kotlin"] = ("kotlin", "Main"),
-            ["go"] = ("go", "main"),
-            ["rust"] = ("rust", "main"),
-            ["ruby"] = ("ruby", "main.rb"),
-            ["php"] = ("php", "main.php"),
-            ["swift"] = ("swift", "main")
+            ["java"] = ("java", "Main")
         };
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
