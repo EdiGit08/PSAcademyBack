@@ -72,6 +72,18 @@ public class UpsertTutorialStepDto
     [Required(ErrorMessage = "La salida esperada del paso es obligatoria.")]
     public string ExpectedOutput { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Valores que el snippet del paso recibe por entrada estándar, uno por línea
+    /// (CRLF y LF equivalentes). Si llega vacía, el paso hereda los valores del leer
+    /// del ejercicio.
+    ///
+    /// No es opcional en la práctica: la salida esperada del paso se verificó
+    /// ejecutándolo con estos datos, así que si el admin los cambia tiene que
+    /// recalcular a mano la salida esperada para que el alumno pueda superarlo.
+    /// </summary>
+    [StringLength(4000, ErrorMessage = "Los datos de entrada del paso no pueden superar los 4000 caracteres.")]
+    public string? Stdin { get; set; }
+
     [StringLength(1000, ErrorMessage = "La pista no puede superar los 1000 caracteres.")]
     public string? Tip { get; set; }
 }

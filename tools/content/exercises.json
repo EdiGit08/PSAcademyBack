@@ -1055,6 +1055,7 @@
           "Task": "Ejecuta y despues responde con otro nombre cualquiera.",
           "CodeSnippet": "Proceso PreguntarNombre\n\tDefinir nombre Como Cadena\n\tLeer nombre\n\tEscribir \"Hola, \", nombre, \"!\"\nFinProceso\n",
           "ExpectedOutput": "Hola, Ana!",
+          "Stdin": "Ana\n",
           "Tip": "Si escribes Ana y sale Hola,  Ana! te falta el espacio final en el primer texto."
         },
         {
@@ -1063,6 +1064,7 @@
           "Task": "Cambia Entero por Real y vuelve a ejecutar con 20: fíjate en el .0 final.",
           "CodeSnippet": "Proceso Tipos\n\tDefinir nombre Como Cadena\n\tDefinir anios Como Entero\n\tLeer nombre\n\tLeer anios\n\tEscribir nombre, \" nacio hace \", anios, \" años\"\nFinProceso\n",
           "ExpectedOutput": "Luis nacio hace 20 años",
+          "Stdin": "Luis\n20\n",
           "Tip": "Un Real con valor entero se muestra 20.0. Asi se ve por que conviene Entero."
         },
         {
@@ -1071,6 +1073,7 @@
           "Task": "Intercambia las dos lineas Leer y responde de nuevo: los datos se cruzan.",
           "CodeSnippet": "Proceso Orden\n\tDefinir primero Como Cadena\n\tDefinir segundo Como Cadena\n\tLeer primero\n\tLeer segundo\n\tEscribir \"1: \", primero\n\tEscribir \"2: \", segundo\nFinProceso\n",
           "ExpectedOutput": "1: Ana\n2: Medellin",
+          "Stdin": "Ana\nMedellin\n",
           "Tip": "Puedes escribir los dos Leer en una sola linea: Leer primero, segundo."
         },
         {
@@ -1079,6 +1082,7 @@
           "Task": "Muestra las dos lineas usando el nombre y la ciudad leidos.",
           "CodeSnippet": "Proceso Presentacion\n\tDefinir nombre Como Cadena\n\tDefinir ciudad Como Cadena\n\tLeer nombre\n\tLeer ciudad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Bienvenido a PS Academy desde \", ciudad\nFinProceso\n",
           "ExpectedOutput": "Hola, Ana\nBienvenido a PS Academy desde Medellin",
+          "Stdin": "Ana\nMedellin\n",
           "Tip": "El segundo Escribir lleva texto fijo al principio y al final, y la ciudad en medio."
         }
       ],
@@ -1182,6 +1186,7 @@
           "Task": "Ejecuta con 15 y 25. Despues prueba con otros dos numeros.",
           "CodeSnippet": "Proceso DosNumeros\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tLeer a\n\tLeer b\n\tEscribir a + b\nFinProceso\n",
           "ExpectedOutput": "40",
+          "Stdin": "15\n25\n",
           "Tip": "Sin Definir tambien funciona, pero declararlas documenta el tipo y evita errores."
         },
         {
@@ -1198,6 +1203,7 @@
           "Task": "Ejecuta con Ana, 8 y 6. Luego prueba con otras dos notas.",
           "CodeSnippet": "Proceso Promedio\n\tDefinir nombre Como Cadena\n\tDefinir nota1 Como Entero\n\tDefinir nota2 Como Entero\n\tLeer nombre\n\tLeer nota1\n\tLeer nota2\n\tEscribir nombre, \" obtuvo \", Trunc((nota1 + nota2) / 2), \" puntos\"\nFinProceso\n",
           "ExpectedOutput": "Ana obtuvo 7 puntos",
+          "Stdin": "Ana\n8\n6\n",
           "Tip": "Si sale Ana obtuvo 7.0 puntos, el problema es que nota1 se guarde como Real."
         },
         {
@@ -1206,6 +1212,7 @@
           "Task": "Muestra la suma y el doble, cada uno en su linea.",
           "CodeSnippet": "Proceso SumaTotal\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tDefinir c Como Entero\n\tLeer a\n\tLeer b\n\tLeer c\n\tEscribir a + b + c\n\tEscribir (a + b + c) * 2\nFinProceso\n",
           "ExpectedOutput": "25\n50",
+          "Stdin": "12\n8\n5\n",
           "Tip": "El doble de la suma necesita parentesis: (a + b + c) * 2."
         }
       ],
@@ -1256,6 +1263,7 @@
           "Task": "Ejecuta y responde con un nombre y una ciudad distintos.",
           "CodeSnippet": "Proceso Repaso2\n\tDefinir nombre Como Cadena\n\tDefinir ciudad Como Cadena\n\tLeer nombre\n\tLeer ciudad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Bienvenido a \", ciudad\nFinProceso\n",
           "ExpectedOutput": "Hola, Ana\nBienvenido a Medellin",
+          "Stdin": "Ana\nMedellin\n",
           "Tip": "Dos Leer, dos lineas de respuesta: la primera para nombre y la segunda para ciudad."
         },
         {
@@ -1264,6 +1272,7 @@
           "Task": "Ejecuta con otra edad y comprueba como cambia el calculo.",
           "CodeSnippet": "Proceso Repaso3\n\tDefinir nombre Como Cadena\n\tDefinir edad Como Entero\n\tDefinir edadProxima Como Entero\n\tLeer nombre\n\tLeer edad\n\tedadProxima <- edad + 1\n\tEscribir nombre, \" cumple \", edad, \" años\"\n\tEscribir \"El año que viene cumplir \", edadProxima\nFinProceso\n",
           "ExpectedOutput": "Ana cumple 15 años\nEl año que viene cumplir 16",
+          "Stdin": "Ana\n15\n",
           "Tip": "La flecha guarda el resultado de la cuenta en edadProxima, que luego se muestra."
         },
         {
@@ -1272,6 +1281,7 @@
           "Task": "Reune todo lo aprendido en un programa que imprima los dos saludos.",
           "CodeSnippet": "Proceso MiPrimerProgramaCompleto\n\tDefinir nombre Como Cadena\n\tDefinir edad Como Entero\n\tLeer nombre\n\tLeer edad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Tienes \", edad, \" años\"\nFinProceso\n",
           "ExpectedOutput": "Hola, Ana\nTienes 15 años",
+          "Stdin": "Ana\n15\n",
           "Tip": "Es el mismo esquema del paso anterior: definir, leer, calcular si hace falta y escribir."
         }
       ],

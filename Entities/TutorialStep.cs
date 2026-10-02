@@ -35,6 +35,17 @@ public class TutorialStep
     /// <summary>Salida que debe producir <see cref="CodeSnippet"/>.</summary>
     public string ExpectedOutput { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Valores que <see cref="CodeSnippet"/> recibe por entrada estándar, uno por línea.
+    /// Si es null o vacío, el paso hereda los "valores del leer" del ejercicio.
+    ///
+    /// Existe porque un paso suele practicar una idea con datos distintos de los del
+    /// reto final: la lección 4 pide dos números (15 y 25) mientras que el ejercicio
+    /// completo lee tres (12, 8 y 5). Sin este campo el alumno vería por consola datos
+    /// que no cuadran con la explicación del paso y ese paso sería imposible de superar.
+    /// </summary>
+    public string? Stdin { get; set; }
+
     /// <summary>Pista para desbloqueados (opcional).</summary>
     public string? Tip { get; set; }
 }

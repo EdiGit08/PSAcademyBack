@@ -79,6 +79,7 @@ public class ExercisesController : ControllerBase
                         Task = s.Task,
                         CodeSnippet = s.CodeSnippet,
                         ExpectedOutput = s.ExpectedOutput,
+                        Stdin = s.Stdin,
                         Tip = s.Tip
                     })
                     .ToList()
@@ -93,6 +94,17 @@ public class ExercisesController : ControllerBase
                 Detail = $"No existe un ejercicio activo con id {id}.",
                 Status = StatusCodes.Status404NotFound
             });
+        }
+
+        // La entrada de un paso se resuelve en memoria y no dentro del Select: el
+        // recorte de saltos de línea no es traducible a SQL y fallaría en tiempo de
+        // ejecución. Se devuelve ya resuelta para que el panel del tutorial le muestre
+        // al alumno los mismos datos que el backend le va a entregar al ejecutar.
+        var exerciseStdin = JoinStdinLines(exercise.Inputs.OrderBy(i => i.OrderIndex).Select(i => i.Value));
+
+        foreach (var step in exercise.TutorialSteps)
+        {
+            step.Stdin = ResolveStepStdin(step.Stdin) ?? exerciseStdin;
         }
 
         var userId = User.GetUserId();
@@ -210,12 +222,13 @@ public class ExercisesController : ControllerBase
         var expectedOutput = step?.ExpectedOutput ?? exercise.ExpectedOutput;
         var isLastStep = step is not null && step.OrderIndex == exercise.TutorialSteps.Max(s => s.OrderIndex);
 
-        // Los "valores del leer" se entregan como líneas de stdin, en orden.
-        var stdin = exercise.Inputs.Count == 0
-            ? null
-            : string.Join("\n", exercise.Inputs
-                .OrderBy(i => i.OrderIndex)
-                .Select(i => i.Value)) + "\n";
+        // Cada paso puede traer sus propios datos de entrada, y si no los trae hereda
+        // los del ejercicio. El orden importa: la lección 4 explica la suma de dos
+        // números con 15 y 25, pero su reto final lee tres (12, 8 y 5). Sin esta
+        // precedencia el paso se ejecutaría con los datos del reto, su salida nunca
+        // coincidiría con la esperada y el alumno quedaría atascado ahí.
+        var stepStdin = ResolveStepStdin(step?.Stdin);
+        var stdin = stepStdin ?? JoinStdinLines(exercise.Inputs.OrderBy(i => i.OrderIndex).Select(i => i.Value));
 
         var execution = await _pistonExecutionService.ExecuteAsync(
             language.Slug,
@@ -253,6 +266,40 @@ public class ExercisesController : ControllerBase
             HasError = execution.HasError,
             UserStatus = status.ToString().ToLowerInvariant()
         });
+    }
+
+    /// <summary>
+    /// Normaliza la entrada estándar guardada en un paso y devuelve null cuando el
+    /// paso no declara ninguna, para que el llamante aplique la del ejercicio.
+    ///
+    /// Se unifica el salto de línea porque el admin lo escribe en un textarea del
+    /// navegador (que entrega CRLF en Windows) y Piston entrega las líneas tal cual:
+    /// un "\r" pegado al valor haría que `Leer` leyera "Ana\r" y la comparación de
+    /// la salida fallara siempre.
+    /// </summary>
+    private static string? ResolveStepStdin(string? stepStdin)
+    {
+        if (string.IsNullOrWhiteSpace(stepStdin))
+        {
+            return null;
+        }
+
+        var normalized = stepStdin.Replace("\r\n", "\n").Replace('\r', '\n').TrimEnd('\n');
+
+        return normalized.Length == 0 ? null : normalized + "\n";
+    }
+
+    /// <summary>
+    /// Entrada estándar a partir de los "valores del leer": una línea por valor, en el
+    /// orden en que el programa los consume.
+    /// </summary>
+    private static string? JoinStdinLines(IEnumerable<string> values)
+    {
+        var lines = values.ToList();
+
+        return lines.Count == 0
+            ? null
+            : string.Join("\n", lines) + "\n";
     }
 
     /// <summary>

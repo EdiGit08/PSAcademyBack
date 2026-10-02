@@ -123,6 +123,9 @@ for (const exercise of exercises) {
     task: step.Task ?? null,
     codeSnippet: step.CodeSnippet,
     expectedOutput: step.ExpectedOutput,
+    // null (y no "") para que el backend guarde NULL y el paso herede los valores
+    // del leer del ejercicio, que es lo que se verifico al calcular la salida esperada.
+    stdin: step.Stdin ?? null,
     tip: step.Tip ?? null,
   }));
 

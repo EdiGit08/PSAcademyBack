@@ -205,6 +205,7 @@ public class AdminExercisesController : ControllerBase
                         Task = s.Task,
                         CodeSnippet = s.CodeSnippet,
                         ExpectedOutput = s.ExpectedOutput,
+                        Stdin = s.Stdin,
                         Tip = s.Tip
                     })
                     .ToList()
@@ -468,6 +469,7 @@ public class AdminExercisesController : ControllerBase
                         Task = s.Task,
                         CodeSnippet = s.CodeSnippet,
                         ExpectedOutput = s.ExpectedOutput,
+                        Stdin = s.Stdin,
                         Tip = s.Tip
                     })
                     .ToList()
@@ -512,6 +514,10 @@ public class AdminExercisesController : ControllerBase
                 Task = string.IsNullOrWhiteSpace(step.Task) ? null : step.Task.Trim(),
                 CodeSnippet = step.CodeSnippet,
                 ExpectedOutput = step.ExpectedOutput,
+                // Se guarda tal cual, sin recortar: un "\r" suelto haría que el Leer
+                // leyera "Ana\r" y el paso fuese imposible de superar. Quien lo resuelve
+                // es ExercisesController, igual que para los valores del ejercicio.
+                Stdin = string.IsNullOrWhiteSpace(step.Stdin) ? null : step.Stdin,
                 Tip = string.IsNullOrWhiteSpace(step.Tip) ? null : step.Tip.Trim()
             });
         }

@@ -212,6 +212,7 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.Task).HasColumnName("task").HasMaxLength(1000);
             entity.Property(e => e.CodeSnippet).HasColumnName("code_snippet").IsRequired();
             entity.Property(e => e.ExpectedOutput).HasColumnName("expected_output").IsRequired();
+            entity.Property(e => e.Stdin).HasColumnName("stdin");
             entity.Property(e => e.Tip).HasColumnName("tip").HasMaxLength(1000);
 
             entity.HasIndex(e => new { e.ExerciseId, e.OrderIndex })

@@ -22,5 +22,12 @@ public class TutorialStepResponse
 
     public string ExpectedOutput { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Valores que el snippet del paso recibe por entrada estándar, uno por línea.
+    /// Llega resuelto (heredado del ejercicio si el paso no trae los suyos) para que
+    /// el panel pueda mostrarle al alumno con qué datos se ejecuta el paso.
+    /// </summary>
+    public string? Stdin { get; set; }
+
     public string? Tip { get; set; }
 }

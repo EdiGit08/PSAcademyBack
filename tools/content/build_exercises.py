@@ -251,13 +251,19 @@ class Verifier:
                 failed = True
                 continue
 
-            code, stdout, stderr = run_python(translated, step.stdin)
+            # Un paso sin stdin propio se ejecuta con los valores del leer del
+            # ejercicio: es lo que hara el backend cuando StudentStep no traiga datos.
+            # Verificarlo aqui con la cadena vacia daria una salida esperada distinta de
+            # la real, y el alumno se quedaria atascado en un paso que el generador dio
+            # por bueno.
+            code, stdout, stderr = run_python(translated, step.stdin or exercise.stdin)
             if code != 0:
                 self.fail(exercise, f"el snippet del paso {index + 1} ('{step.title}') fallo: {first_line(stderr)}")
                 failed = True
                 continue
 
             step.expected = normalize(stdout)
+
             # El ultimo paso del tutorial es el reto del ejercicio: si su salida no
             # coincide con la del ejercicio, el alumno nunca podria completarlo.
             if index == len(exercise.tutorial) - 1 and step.expected != exercise.expected:
@@ -447,6 +453,7 @@ def main() -> int:
                         "Task": s.task,
                         "CodeSnippet": s.snippet,
                         "ExpectedOutput": s.expected,
+                        "Stdin": s.stdin or None,
                         "Tip": s.tip,
                     }
                     for s in e.tutorial
