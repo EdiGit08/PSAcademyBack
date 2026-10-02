@@ -10,13 +10,6 @@ public class PistonOptions
     /// En desarrollo apunta al contenedor local definido en docker-compose.yml.
     /// En producción DEBE sobrescribirse con "Piston__BaseUrl": una instancia
     /// propia (VPS) o la instancia pública con clave autorizada.
-    ///
-    /// La barra final es obligatoria en la práctica: las llamadas se hacen con
-    /// "execute" como ruta relativa, y System.Uri descarta el último segmento
-    /// cuando la base no termina en "/". Sin ella, ".../api/v2" se resuelve a
-    /// ".../api/execute" y Piston responde 404, que el cliente ve como un 502
-    /// confuso. Se añade aquí para que un descuido al escribir la variable de
-    /// entorno no rompa la ejecución de código.
     /// </summary>
     public string BaseUrl
     {
@@ -27,11 +20,41 @@ public class PistonOptions
     private string _baseUrl = "https://emkc.org/api/v2/piston/";
 
     /// <summary>
-    /// Instancia Piston ya normalizada: sin espacios y con la barra final, que es
-    /// como se la pasa a <see cref="HttpClient.BaseAddress"/>.
+    /// Instancia Piston normalizada, como se le pasa a <see cref="HttpClient.BaseAddress"/>.
     /// </summary>
-    public string NormalizedBaseUrl =>
-        BaseUrl.EndsWith('/') ? BaseUrl : $"{BaseUrl}/";
+    /// <remarks>
+    /// Las llamadas se hacen con "execute" como ruta relativa, así que el valor
+    /// tiene que terminar en "/": sin ella System.Uri descarta el último segmento
+    /// y ".../api/v2" acaba pidiendo ".../api/execute". Y si solo se pega el host
+    /// (que es lo que anuncia el túnel) falta el sufijo entero, con lo que la
+    /// petición cae en la raíz. Cualquiera de los dos deslices acaba en un 404 de
+    /// Piston que el cliente reporta como un 502 "el ejecutor no está disponible",
+    /// muy lejos de la causa real, así que se corrige aquí en vez de obligar a
+    /// quien despliega a recordar el formato exacto.
+    /// </remarks>
+    public string NormalizedBaseUrl
+    {
+        get
+        {
+            var url = BaseUrl.Trim();
+
+            if (url.Length == 0)
+            {
+                return url;
+            }
+
+            var hasApiPath =
+                Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+                !string.IsNullOrEmpty(uri.AbsolutePath.Trim('/'));
+
+            var withSuffix = hasApiPath ? url : $"{url.TrimEnd('/')}{ApiSuffix}";
+
+            return withSuffix.EndsWith('/') ? withSuffix : $"{withSuffix}/";
+        }
+    }
+
+    /// <summary>Ruta de la API v2 de Piston, que es donde vive "execute".</summary>
+    private const string ApiSuffix = "/api/v2/";
 
     /// <summary>
     /// Clave de autorización para instancias que la exigen.

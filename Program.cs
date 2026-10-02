@@ -276,6 +276,14 @@ builder.Services.AddOpenApi(options =>
 
 var app = builder.Build();
 
+// La URL que realmente se usa, ya normalizada: si /execute empieza a fallar con
+// 404 o 502, este log dice de inmediato contra qué host estaban saliendo las
+// peticiones, sin tener que abrir el panel de Render a buscar la variable.
+app.Logger.LogInformation(
+    "Ejecutor de código (Piston): Piston__BaseUrl={Configured} -> {Effective}",
+    string.IsNullOrWhiteSpace(pistonBaseUrl) ? "(vacío)" : pistonBaseUrl,
+    new PSAcademyBack.Services.PistonOptions { BaseUrl = pistonBaseUrl ?? string.Empty }.NormalizedBaseUrl);
+
 // La instancia pública de Piston es compartida, sin SLA y sujeta a rate limiting.
 // En producción conviene apuntar a un Piston autoalojado.
 if (!app.Environment.IsDevelopment()
