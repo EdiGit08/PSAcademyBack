@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Traductor de PSeint a Python en linea de comandos.
+
+    Es el traductor real del backend (PSA cademyBack.Services.PSeintTranslator), no una
+    reimplementacion: asi, el generador de contenidos acepta exactamente el PSeint que
+    el ejecutor de Piston aceptara mas tarde. Si el generador dice que un ejercicio
+    esta bien, el alumno lo vera aceptado.
+
+    Uso:
+        dotnet build tools/pseint-tool -c Release -o tools/pseint-tool/out
+        type ejercicio.pseint | dotnet tools/pseint-tool/out/pseint-tool.dll
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>PseintTool</RootNamespace>
+    <AssemblyName>pseint-tool</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PSAcademyBack.csproj" />
+  </ItemGroup>
+
+</Project>

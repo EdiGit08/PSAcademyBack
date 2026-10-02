@@ -1,0 +1,4 @@
+# Salida de compilacion: el generador la produce, no se versiona.
+out/
+bin/
+obj/
