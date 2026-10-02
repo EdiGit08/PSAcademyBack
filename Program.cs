@@ -284,6 +284,17 @@ app.Logger.LogInformation(
     string.IsNullOrWhiteSpace(pistonBaseUrl) ? "(vacío)" : pistonBaseUrl,
     new PSAcademyBack.Services.PistonOptions { BaseUrl = pistonBaseUrl ?? string.Empty }.NormalizedBaseUrl);
 
+// Un origen mal escrito en Cors__AllowedOrigins no da error: la API sigue respondiendo
+// 200, pero sin la cabecera Access-Control-Allow-Origin, y el navegador bloquea la
+// llamada sin mensaje util ("CORS policy: No 'Access-Control-Allow-Origin' header").
+// El error aparece en el frontend y a kilometros de su causa, asi que se imprime
+// la lista exacta que el proceso esta usando.
+app.Logger.LogInformation(
+    "CORS: origenes permitidos = {Origins}",
+    allowedOrigins.Length == 0
+        ? "ninguno (política permisiva: responde Access-Control-Allow-Origin: * a cualquier origen)"
+        : string.Join(", ", allowedOrigins));
+
 // La instancia pública de Piston es compartida, sin SLA y sujeta a rate limiting.
 // En producción conviene apuntar a un Piston autoalojado.
 if (!app.Environment.IsDevelopment()
