@@ -26,6 +26,12 @@ public class Exercise
 
     public ICollection<ExerciseTemplate> Templates { get; set; } = new List<ExerciseTemplate>();
 
+    /// <summary>
+    /// Pasos guiados del tutorial. Vacío en los ejercicios normales: la categoría
+    /// "Tutorial" es la única que los usa.
+    /// </summary>
+    public ICollection<TutorialStep> TutorialSteps { get; set; } = new List<TutorialStep>();
+
     /// <summary>Valores que el programa recibe por stdin ("valores del leer").</summary>
     public ICollection<ExerciseInput> Inputs { get; set; } = new List<ExerciseInput>();
 

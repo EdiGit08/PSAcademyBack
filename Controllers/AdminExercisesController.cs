@@ -193,6 +193,20 @@ public class AdminExercisesController : ControllerBase
                         Value = i.Value,
                         ValueType = i.ValueType
                     })
+                    .ToList(),
+                TutorialSteps = e.TutorialSteps
+                    .OrderBy(s => s.OrderIndex)
+                    .Select(s => new TutorialStepResponse
+                    {
+                        Id = s.Id,
+                        OrderIndex = s.OrderIndex,
+                        Title = s.Title,
+                        Body = s.Body,
+                        Task = s.Task,
+                        CodeSnippet = s.CodeSnippet,
+                        ExpectedOutput = s.ExpectedOutput,
+                        Tip = s.Tip
+                    })
                     .ToList()
             })
             .ToListAsync(cancellationToken);
@@ -277,6 +291,7 @@ public class AdminExercisesController : ControllerBase
 
         AddTemplates(exercise, request.Templates);
         AddInputs(exercise, request.Inputs);
+        AddTutorialSteps(exercise, request.TutorialSteps);
 
         _dbContext.Exercises.Add(exercise);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -301,6 +316,7 @@ public class AdminExercisesController : ControllerBase
         var exercise = await _dbContext.Exercises
             .Include(e => e.Templates)
             .Include(e => e.Inputs)
+            .Include(e => e.TutorialSteps)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         if (exercise is null)
@@ -369,6 +385,11 @@ public class AdminExercisesController : ControllerBase
         _dbContext.ExerciseInputs.RemoveRange(exercise.Inputs);
         AddInputs(exercise, request.Inputs);
 
+        // Y para los pasos del tutorial: si la lista llega vacia, el ejercicio deja de
+        // ser de tutorial y sus pasos desaparecen.
+        _dbContext.TutorialSteps.RemoveRange(exercise.TutorialSteps);
+        AddTutorialSteps(exercise, request.TutorialSteps);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         var updated = await ProjectToAdminResponse()
@@ -435,6 +456,20 @@ public class AdminExercisesController : ControllerBase
                         Value = i.Value,
                         ValueType = i.ValueType
                     })
+                    .ToList(),
+                TutorialSteps = e.TutorialSteps
+                    .OrderBy(s => s.OrderIndex)
+                    .Select(s => new TutorialStepResponse
+                    {
+                        Id = s.Id,
+                        OrderIndex = s.OrderIndex,
+                        Title = s.Title,
+                        Body = s.Body,
+                        Task = s.Task,
+                        CodeSnippet = s.CodeSnippet,
+                        ExpectedOutput = s.ExpectedOutput,
+                        Tip = s.Tip
+                    })
                     .ToList()
             });
 
@@ -459,6 +494,25 @@ public class AdminExercisesController : ControllerBase
                 OrderIndex = i,
                 Value = inputs[i].Value,
                 ValueType = inputs[i].ValueType
+            });
+        }
+    }
+
+    private static void AddTutorialSteps(Exercise exercise, List<UpsertTutorialStepDto> steps)
+    {
+        for (var i = 0; i < steps.Count; i++)
+        {
+            var step = steps[i];
+
+            exercise.TutorialSteps.Add(new TutorialStep
+            {
+                OrderIndex = i,
+                Title = step.Title.Trim(),
+                Body = step.Body,
+                Task = string.IsNullOrWhiteSpace(step.Task) ? null : step.Task.Trim(),
+                CodeSnippet = step.CodeSnippet,
+                ExpectedOutput = step.ExpectedOutput,
+                Tip = string.IsNullOrWhiteSpace(step.Tip) ? null : step.Tip.Trim()
             });
         }
     }

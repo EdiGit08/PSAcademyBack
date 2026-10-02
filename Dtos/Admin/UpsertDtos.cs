@@ -46,6 +46,34 @@ public class UpsertExerciseDto
     /// Reemplazan por completo los existentes.
     /// </summary>
     public List<UpsertInputDto> Inputs { get; set; } = new();
+
+    /// <summary>
+    /// Pasos del tutorial. El índice del arreglo es su posición. Si la lista viene
+    /// vacía el ejercicio deja de ser de tutorial y sus pasos se borran en cascada.
+    /// </summary>
+    public List<UpsertTutorialStepDto> TutorialSteps { get; set; } = new();
+}
+
+public class UpsertTutorialStepDto
+{
+    [Required(ErrorMessage = "El título del paso es obligatorio.")]
+    [StringLength(200, MinimumLength = 3, ErrorMessage = "El título del paso debe tener entre 3 y 200 caracteres.")]
+    public string Title { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "La explicación del paso es obligatoria.")]
+    public string Body { get; set; } = string.Empty;
+
+    [StringLength(1000, ErrorMessage = "El reto no puede superar los 1000 caracteres.")]
+    public string? Task { get; set; }
+
+    [Required(ErrorMessage = "El código del paso es obligatorio.")]
+    public string CodeSnippet { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "La salida esperada del paso es obligatoria.")]
+    public string ExpectedOutput { get; set; } = string.Empty;
+
+    [StringLength(1000, ErrorMessage = "La pista no puede superar los 1000 caracteres.")]
+    public string? Tip { get; set; }
 }
 
 public class UpsertInputDto

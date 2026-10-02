@@ -26,7 +26,7 @@ import os
 import subprocess
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 LANGUAGES = ("python", "java", "pseint")
 
@@ -34,8 +34,34 @@ LANGUAGES = ("python", "java", "pseint")
 EXPECTED_DISTRIBUTION = {"Easy": 4, "Medium": 4, "Hard": 2}
 EXPECTED_PER_CATEGORY = 10
 
+# El tutorial es la unica categoria con otro reparto: 5 lecciones guiadas, todas
+# faciles, y cada una con sus pasos.
+TUTORIAL_CATEGORY = "Tutorial"
+COURSE_CATEGORIES = ("Fundamentos", "Estructuras de control", "Funciones")
+EXPECTED_TUTORIAL_COUNT = 5
+MIN_TUTORIAL_STEPS = 3
+
 
 # --------------------------------------------------------------------- Modelo
+
+
+@dataclass
+class Step:
+    """Un paso guiado del tutorial.
+
+    A diferencia del ejercicio, el paso solo existe en PSeint: es el lenguaje en el
+    que se explica todo el curso y el unico que el traductor acepta como entrada
+    del alumno. `snippet` es un programa completo y ejecutable, no un fragmento, para
+    que el alumno pueda ejecutarlo tal cual en el paso.
+    """
+
+    title: str
+    body: str
+    snippet: str
+    task: str | None = None
+    stdin: str = ""
+    tip: str | None = None
+    expected: str | None = None
 
 
 @dataclass
@@ -57,6 +83,7 @@ class Exercise:
     solutions: dict[str, str]
     stdin: str = ""
     expected: str | None = None
+    tutorial: list[Step] = field(default_factory=list)
 
 
 def i_number(value) -> dict:
@@ -198,6 +225,49 @@ class Verifier:
         exercise.expected = outputs["python"]
         return True
 
+    # ------------------------------------------------------------- tutorial
+
+    def verify_steps(self, exercise: Exercise) -> bool:
+        """Ejecuta cada snippet del tutorial y fija su salida esperada.
+
+        Un paso del tutorial no se valida contra la salida del ejercicio sino contra
+        la suya, asi que tambien se ejecuta de verdad: si el snippet esta roto, el
+        alumno no podria avanzar nunca por ese paso.
+        """
+        if not exercise.tutorial:
+            return True
+
+        if len(exercise.tutorial) < MIN_TUTORIAL_STEPS:
+            return self.fail(
+                exercise,
+                f"el tutorial tiene {len(exercise.tutorial)} pasos, se esperaban al menos {MIN_TUTORIAL_STEPS}.")
+
+        failed = False
+
+        for index, step in enumerate(exercise.tutorial):
+            ok, translated = pseint_to_python(step.snippet, self.tool_dll)
+            if not ok:
+                self.fail(exercise, f"el snippet del paso {index + 1} ('{step.title}') no tradujo: {first_line(translated)}")
+                failed = True
+                continue
+
+            code, stdout, stderr = run_python(translated, step.stdin)
+            if code != 0:
+                self.fail(exercise, f"el snippet del paso {index + 1} ('{step.title}') fallo: {first_line(stderr)}")
+                failed = True
+                continue
+
+            step.expected = normalize(stdout)
+            # El ultimo paso del tutorial es el reto del ejercicio: si su salida no
+            # coincide con la del ejercicio, el alumno nunca podria completarlo.
+            if index == len(exercise.tutorial) - 1 and step.expected != exercise.expected:
+                self.fail(
+                    exercise,
+                    f"el ultimo paso produce {step.expected!r} y el ejercicio {exercise.expected!r}: no son el mismo reto.")
+                failed = True
+
+        return not failed
+
     # ------------------------------------------------------------ plantillas
 
     def verify_starters(self, exercise: Exercise) -> bool:
@@ -206,6 +276,10 @@ class Verifier:
         Solo se comprueba que no rompa: una plantilla puede no imprimir nada todavia.
         Lo que no se permite es que el alumno reciba un error de compilacion o una
         traduccion fallida en su primer intento.
+
+        La plantilla de Python se ejecuta con el mismo stdin del ejercicio: si el
+        codigo de inicio ya pide un dato con input(), sin el dato abortaria con
+        EOFError y la plantilla pareceria rota cuando no lo esta.
         """
         failed = False
 
@@ -214,7 +288,7 @@ class Verifier:
             self.fail(exercise, reason)
             failed = True
 
-        code, _, stderr = run_python(exercise.starter["python"])
+        code, _, stderr = run_python(exercise.starter["python"], exercise.stdin)
         if code != 0:
             report(f"la plantilla python no es valida: {first_line(stderr)}")
 
@@ -234,7 +308,7 @@ class Verifier:
 
 
 def check_distribution(accepted: list[Exercise]) -> list[str]:
-    """Comprueba el reparto 10 por categoria con 4/4/2 de dificultad."""
+    """Comprueba el reparto 10 por categoria con 4/4/2, y el tutorial aparte."""
     problems: list[str] = []
 
     by_category: dict[str, dict[str, int]] = {}
@@ -244,6 +318,20 @@ def check_distribution(accepted: list[Exercise]) -> list[str]:
 
     for category, counts in sorted(by_category.items()):
         total = sum(counts.values())
+
+        if category == TUTORIAL_CATEGORY:
+            # El tutorial no sigue el 4/4/2: son 5 lecciones guiadas, todas faciles.
+            if total != EXPECTED_TUTORIAL_COUNT:
+                problems.append(
+                    f"{category}: {total} lecciones, se esperaban {EXPECTED_TUTORIAL_COUNT}.")
+            if counts.get("Easy", 0) != total:
+                problems.append(f"{category}: todas las lecciones deben ser Easy.")
+            continue
+
+        if category not in COURSE_CATEGORIES:
+            problems.append(f"{category}: categoria sin reparto definido.")
+            continue
+
         if total != EXPECTED_PER_CATEGORY:
             problems.append(f"{category}: {total} ejercicios, se esperaban {EXPECTED_PER_CATEGORY}.")
 
@@ -286,8 +374,13 @@ def main() -> int:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import exercises_part1
     import exercises_part2
+    import tutorial
 
-    all_exercises = exercises_part1.EXERCISES + exercises_part2.EXERCISES
+    all_exercises = (
+        exercises_part1.EXERCISES
+        + exercises_part2.EXERCISES
+        + tutorial.TUTORIAL_EXERCISES
+    )
 
     seen: set[str] = set()
     duplicates = [e.key for e in all_exercises if e.key in seen or seen.add(e.key)]
@@ -305,12 +398,19 @@ def main() -> int:
         label = f"[{index:2d}/{total}] {exercise.key:<9} {exercise.title[:36]:<36}"
         solutions_ok = verifier.verify_solutions(exercise)
         starters_ok = verifier.verify_starters(exercise)
+        steps_ok = verifier.verify_steps(exercise)
 
-        if solutions_ok and starters_ok:
+        if solutions_ok and starters_ok and steps_ok:
             accepted.append(exercise)
-            print(f"{label} OK    -> {exercise.expected!r}")
+            suffix = f" ({len(exercise.tutorial)} pasos)" if exercise.tutorial else ""
+            print(f"{label} OK{suffix} -> {exercise.expected!r}")
         else:
-            state = "solucion" if not solutions_ok else "plantilla"
+            if not solutions_ok:
+                state = "solucion"
+            elif not starters_ok:
+                state = "plantilla"
+            else:
+                state = "tutorial"
             print(f"{label} FALLO ({state})")
 
     if verifier.failures:
@@ -340,6 +440,17 @@ def main() -> int:
                 "ExpectedOutput": e.expected,
                 "IsActive": True,
                 "Inputs": e.inputs,
+                "TutorialSteps": [
+                    {
+                        "Title": s.title,
+                        "Body": s.body,
+                        "Task": s.task,
+                        "CodeSnippet": s.snippet,
+                        "ExpectedOutput": s.expected,
+                        "Tip": s.tip,
+                    }
+                    for s in e.tutorial
+                ],
                 "Templates": [
                     {"LanguageSlug": lang, "StarterCode": e.starter[lang]} for lang in LANGUAGES
                 ],
@@ -361,6 +472,10 @@ def main() -> int:
     for category, counts in sorted(by_category.items()):
         breakdown = ", ".join(f"{d}={counts.get(d, 0)}" for d in ("Easy", "Medium", "Hard"))
         print(f"  {category}: {sum(counts.values())} ({breakdown})")
+
+    total_steps = sum(len(e.tutorial) for e in accepted)
+    if total_steps:
+        print(f"{total_steps} pasos de tutorial verificados.")
 
     return 0
 

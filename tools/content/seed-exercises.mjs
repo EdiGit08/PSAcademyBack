@@ -117,6 +117,15 @@ for (const exercise of exercises) {
     return { languageId, starterCode: template.StarterCode };
   });
 
+  const tutorialSteps = (exercise.TutorialSteps ?? []).map((step) => ({
+    title: step.Title,
+    body: step.Body,
+    task: step.Task ?? null,
+    codeSnippet: step.CodeSnippet,
+    expectedOutput: step.ExpectedOutput,
+    tip: step.Tip ?? null,
+  }));
+
   const payload = {
     categoryId,
     title: exercise.Title,
@@ -125,6 +134,7 @@ for (const exercise of exercises) {
     expectedOutput: exercise.ExpectedOutput,
     isActive: exercise.IsActive,
     inputs: exercise.Inputs,
+    tutorialSteps,
     templates,
   };
 
@@ -132,7 +142,8 @@ for (const exercise of exercises) {
   const verb = current ? "PUT " : "POST";
 
   if (dryRun) {
-    console.log(`${verb} /api/admin/exercises -> ${exercise.Title}`);
+    const steps = tutorialSteps.length ? ` (${tutorialSteps.length} pasos)` : "";
+    console.log(`${verb} /api/admin/exercises -> ${exercise.Title}${steps}`);
     continue;
   }
 
@@ -144,10 +155,10 @@ for (const exercise of exercises) {
 
   if (current) {
     updated += 1;
-    console.log(`actualizado  ${exercise.Title}`);
+    console.log(`actualizado  ${exercise.Title}${tutorialSteps.length ? ` (${tutorialSteps.length} pasos)` : ""}`);
   } else {
     created += 1;
-    console.log(`creado       ${exercise.Title}`);
+    console.log(`creado       ${exercise.Title}${tutorialSteps.length ? ` (${tutorialSteps.length} pasos)` : ""}`);
   }
 }
 

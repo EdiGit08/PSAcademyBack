@@ -28,6 +28,9 @@ public class AdminExerciseResponse
 
     /// <summary>Valores del "Leer" en el orden en que se entregarán por stdin.</summary>
     public List<ExerciseInputResponse> Inputs { get; set; } = new();
+
+    /// <summary>Pasos del tutorial. Vacío si el ejercicio no es de tutorial.</summary>
+    public List<TutorialStepResponse> TutorialSteps { get; set; } = new();
 }
 
 public class AdminTemplateResponse

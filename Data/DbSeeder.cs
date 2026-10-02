@@ -114,6 +114,9 @@ public static class DbSeeder
     {
         var categories = new[]
         {
+            // OrderIndex 0: el tutorial es la puerta de entrada, asi que aparece antes
+            // que cualquier otra categoria en el panel del alumno.
+            new Category { Name = "Tutorial", Description = "Aprende a escribir tus primeros programas paso a paso.", OrderIndex = 0 },
             new Category { Name = "Fundamentos", Description = "Variables, tipos y operadores.", OrderIndex = 1 },
             new Category { Name = "Estructuras de control", Description = "Condicionales y bucles.", OrderIndex = 2 },
             new Category { Name = "Funciones", Description = "Definición y reutilización de funciones.", OrderIndex = 3 }

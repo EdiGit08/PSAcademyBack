@@ -19,6 +19,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ExerciseInput> ExerciseInputs => Set<ExerciseInput>();
     public DbSet<UserProgress> UserProgress => Set<UserProgress>();
     public DbSet<UserCodeDraft> UserCodeDrafts => Set<UserCodeDraft>();
+    public DbSet<TutorialStep> TutorialSteps => Set<TutorialStep>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -198,6 +199,31 @@ public class ApplicationDbContext : DbContext
                   .HasForeignKey(e => e.LanguageId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
+    modelBuilder.Entity<TutorialStep>(entity =>
+        {
+            entity.ToTable("tutorial_steps");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ExerciseId).HasColumnName("exercise_id");
+            entity.Property(e => e.OrderIndex).HasColumnName("order_index");
+            entity.Property(e => e.Title).HasColumnName("title").HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Body).HasColumnName("body").IsRequired();
+            entity.Property(e => e.Task).HasColumnName("task").HasMaxLength(1000);
+            entity.Property(e => e.CodeSnippet).HasColumnName("code_snippet").IsRequired();
+            entity.Property(e => e.ExpectedOutput).HasColumnName("expected_output").IsRequired();
+            entity.Property(e => e.Tip).HasColumnName("tip").HasMaxLength(1000);
+
+            entity.HasIndex(e => new { e.ExerciseId, e.OrderIndex })
+                  .IsUnique()
+                  .HasDatabaseName("ix_tutorial_steps_exercise_id_order_index");
+
+            entity.HasOne(e => e.Exercise)
+                  .WithMany(x => x.TutorialSteps)
+                  .HasForeignKey(e => e.ExerciseId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
     }
 
     /// <summary>

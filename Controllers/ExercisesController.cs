@@ -67,6 +67,20 @@ public class ExercisesController : ControllerBase
                         Value = i.Value,
                         ValueType = i.ValueType
                     })
+                    .ToList(),
+                TutorialSteps = e.TutorialSteps
+                    .OrderBy(s => s.OrderIndex)
+                    .Select(s => new TutorialStepResponse
+                    {
+                        Id = s.Id,
+                        OrderIndex = s.OrderIndex,
+                        Title = s.Title,
+                        Body = s.Body,
+                        Task = s.Task,
+                        CodeSnippet = s.CodeSnippet,
+                        ExpectedOutput = s.ExpectedOutput,
+                        Tip = s.Tip
+                    })
                     .ToList()
             })
             .SingleOrDefaultAsync(cancellationToken);
@@ -136,6 +150,7 @@ public class ExercisesController : ControllerBase
         var exercise = await _dbContext.Exercises
             .AsNoTracking()
             .Include(e => e.Inputs)
+            .Include(e => e.TutorialSteps)
             .FirstOrDefaultAsync(e => e.Id == id && e.IsActive, cancellationToken);
 
         if (exercise is null)
@@ -174,6 +189,27 @@ public class ExercisesController : ControllerBase
             });
         }
 
+        // En el tutorial la salida se valida contra la del paso, no contra la del
+        // ejercicio: cada paso es una práctica independiente. Solo el último paso
+        // marca el ejercicio como completado, de modo que aprobar el primero no
+        // regale el progreso de la lección entera.
+        var step = exercise.TutorialSteps
+            .OrderBy(s => s.OrderIndex)
+            .FirstOrDefault(s => s.Id == request.TutorialStepId);
+
+        if (request.TutorialStepId.HasValue && step is null)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Title = "Paso no encontrado",
+                Detail = $"El paso {request.TutorialStepId} no pertenece al ejercicio {id}.",
+                Status = StatusCodes.Status404NotFound
+            });
+        }
+
+        var expectedOutput = step?.ExpectedOutput ?? exercise.ExpectedOutput;
+        var isLastStep = step is not null && step.OrderIndex == exercise.TutorialSteps.Max(s => s.OrderIndex);
+
         // Los "valores del leer" se entregan como líneas de stdin, en orden.
         var stdin = exercise.Inputs.Count == 0
             ? null
@@ -203,8 +239,8 @@ public class ExercisesController : ControllerBase
             });
         }
 
-        var isCorrect = !execution.HasError && OutputNormalizer.AreEqual(exercise.ExpectedOutput, execution.Stdout);
-        var status = isCorrect ? ProgressStatus.Completed : ProgressStatus.Attempted;
+        var isCorrect = !execution.HasError && OutputNormalizer.AreEqual(expectedOutput, execution.Stdout);
+        var status = isCorrect && (step is null || isLastStep) ? ProgressStatus.Completed : ProgressStatus.Attempted;
 
         await UpsertProgressAsync(userId.Value, id, status, request.Code, language.Id, cancellationToken);
 
@@ -212,7 +248,7 @@ public class ExercisesController : ControllerBase
         {
             IsCorrect = isCorrect,
             ActualOutput = execution.Stdout,
-            ExpectedOutput = OutputNormalizer.Normalize(exercise.ExpectedOutput),
+            ExpectedOutput = OutputNormalizer.Normalize(expectedOutput),
             ErrorOutput = string.IsNullOrWhiteSpace(execution.Stderr) ? null : execution.Stderr,
             HasError = execution.HasError,
             UserStatus = status.ToString().ToLowerInvariant()

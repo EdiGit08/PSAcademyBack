@@ -30,4 +30,10 @@ public class ExerciseDetailResponse
     /// permite continuar donde se dejó aunque no se haya ejecutado.
     /// </summary>
     public List<ExerciseDraftResponse> Drafts { get; set; } = new();
+
+    /// <summary>
+    /// Pasos del tutorial, en orden. Vacio en los ejercicios que no son de tutorial:
+    /// la categoria es la que decide si la pagina /tutorial tiene algo que mostrar.
+    /// </summary>
+    public List<TutorialStepResponse> TutorialSteps { get; set; } = new();
 }

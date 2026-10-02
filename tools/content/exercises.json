@@ -13,6 +13,7 @@
           "ValueType": "Text"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -45,6 +46,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -77,6 +79,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -109,6 +112,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -141,6 +145,7 @@
           "ValueType": "Text"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -177,6 +182,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -205,6 +211,7 @@
           "ValueType": "Text"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -237,6 +244,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -269,6 +277,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -301,6 +310,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -333,6 +343,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -361,6 +372,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -389,6 +401,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -417,6 +430,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -453,6 +467,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -481,6 +496,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -509,6 +525,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -537,6 +554,7 @@
           "ValueType": "Text"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -565,6 +583,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -613,6 +632,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -645,6 +665,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -673,6 +694,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -709,6 +731,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -737,6 +760,7 @@
           "ValueType": "Text"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -769,6 +793,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -797,6 +822,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -837,6 +863,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -869,6 +896,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -897,6 +925,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -929,6 +958,7 @@
           "ValueType": "Number"
         }
       ],
+      "TutorialSteps": [],
       "Templates": [
         {
           "LanguageSlug": "python",
@@ -941,6 +971,322 @@
         {
           "LanguageSlug": "pseint",
           "StarterCode": "Proceso Ejercicio\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tDefinir resto Como Entero\n\tLeer a, b\n\t// PSeint no tiene funciones: Mientras b <> 0 Hacer y guarda el resto\nFinProceso\n"
+        }
+      ]
+    },
+    {
+      "Category": "Tutorial",
+      "Title": "Tu primer programa",
+      "Description": "Un programa es una lista de instrucciones que el ordenador ejecuta de arriba abajo.\n\nEn esta leccion descubres las dos piezas que usaremos en todas las demas:\n- El bloque `Proceso ... FinProceso`, que encierra el programa.\n- La instruccion `Escribir`, que muestra un mensaje en la consola.\n\nNo necesitas saber nada de PSeint: solo ejecuta los tres pasos y veras como nace un programa de verdad.",
+      "Difficulty": "Easy",
+      "ExpectedOutput": "PS Academy\nAprende a programar\nEs muy facil",
+      "IsActive": true,
+      "Inputs": [],
+      "TutorialSteps": [
+        {
+          "Title": "Todo empieza con Proceso",
+          "Body": "Todo programa en PSeint tiene la misma estructura: `Proceso` abre el bloque y `FinProceso` lo cierra. Entre medias van las instrucciones, una por linea.\n\nEl ordenador las ejecuta **de arriba abajo**, sin saltarse ninguna. Y nada fuera de ese bloque forma parte del programa.\n\nEste programa tiene una sola instruccion: `Escribir \"Hola\"`. Lo que va entre comillas dobles es un texto fijo, se muestra tal cual.",
+          "Task": "Ejecuta el programa. Despues cambia la palabra Hola por tu nombre de pila y vuelve a ejecutar.",
+          "CodeSnippet": "Proceso MiPrimerPrograma\n\tEscribir \"Hola\"\nFinProceso\n",
+          "ExpectedOutput": "Hola",
+          "Tip": "Si la consola se queda vacia, comprueba que el Escribir esta entre Proceso y FinProceso."
+        },
+        {
+          "Title": "Cada Escribir, una linea",
+          "Body": "Cada `Escribir` termina con un salto de linea, asi que tres instrucciones `Escribir` producen tres renglones.\n\n- `Escribir \"Uno\"` imprime `Uno` y baja a la siguiente linea.\n- `Escribir \"Uno\", \"Dos\"` imprime `UnoDos` en la **misma** linea: la coma concatena sin dejar espacio.\n",
+          "Task": "Anade un cuarto Escribir con el nombre de tu colegio y ejecuta otra vez.",
+          "CodeSnippet": "Proceso VariasLineas\n\tEscribir \"Primera linea\"\n\tEscribir \"Segunda linea\"\n\tEscribir \"Tercera linea\"\nFinProceso\n",
+          "ExpectedOutput": "Primera linea\nSegunda linea\nTercera linea",
+          "Tip": "Un Escribir por linea es lo habitual; la coma solo se usa para juntar textos cortos."
+        },
+        {
+          "Title": "Texto fijo o valor calculado",
+          "Body": "Aqui esta la diferencia que mas se confunde al empezar:\n\n- **Entre comillas** es un texto fijo: `Escribir \"7 + 5\"` imprime `7 + 5`.\n- **Sin comillas** es un valor o una operacion: `Escribir 7 + 5` calcula la suma e imprime `12`.\n\nY las variables se escriben sin comillas, porque son valores, no textos.",
+          "Task": "Cambia el + por un - en la tercera linea y comprueba como cambia la salida.",
+          "CodeSnippet": "Proceso TextoyNumero\n\tEscribir \"El resultado es:\"\n\tEscribir 7 + 5\n\tEscribir \"7 + 5\"\nFinProceso\n",
+          "ExpectedOutput": "El resultado es:\n12\n7 + 5",
+          "Tip": "Si una frase tiene acentos o espacios, siempre entre comillas."
+        },
+        {
+          "Title": "Reto: tu presentacion",
+          "Body": "Ahora te toca a ti. Escribe un programa que imprima **exactamente** estas tres lineas, en este orden:\n\n```\nPS Academy\nAprende a programar\nEs muy facil\n```\n\nLa comparacion es exacta: un espacio de mas o una linea de menos y no cuenta.",
+          "Task": "Imprime las tres lineas exactamente iguales a las del enunciado.",
+          "CodeSnippet": "Proceso MiPrimerPrograma\n\tEscribir \"PS Academy\"\n\tEscribir \"Aprende a programar\"\n\tEscribir \"Es muy facil\"\nFinProceso\n",
+          "ExpectedOutput": "PS Academy\nAprende a programar\nEs muy facil",
+          "Tip": "Tres Escribir, tres lineas. Copia el enunciado sin anadir puntos ni comas."
+        }
+      ],
+      "Templates": [
+        {
+          "LanguageSlug": "python",
+          "StarterCode": "# Muestra tres mensajes, uno por linea, con print().\n"
+        },
+        {
+          "LanguageSlug": "java",
+          "StarterCode": "import java.util.Scanner;\n\npublic class Main {\n\n    static Scanner sc = new Scanner(System.in);\n\n    public static void main(String[] args) {\n        // Muestra aqui los tres mensajes con System.out.println.\n    }\n}\n"
+        },
+        {
+          "LanguageSlug": "pseint",
+          "StarterCode": "Proceso MiPrimerPrograma\n\t// Cada linea que escribas aqui aparecera en la consola.\n\t// Usa Escribir con el texto entre comillas dobles.\nFinProceso\n"
+        }
+      ]
+    },
+    {
+      "Category": "Tutorial",
+      "Title": "Leer: pedir datos",
+      "Description": "Hasta ahora tus programas solo hablan: el mensaje estaba escrito dentro del codigo.\n\n`Leer` cambia eso: el programa se detiene, espera a que alguien escriba una respuesta y la guarda en una variable. Asi nasce un programa que se adapta al que lo usa.\n\nEn esta leccion ves que es `Definir`, como se combinan `Leer` y `Escribir` y por que el orden de las preguntas importa.",
+      "Difficulty": "Easy",
+      "ExpectedOutput": "Hola, Ana\nBienvenido a PS Academy desde Medellin",
+      "IsActive": true,
+      "Inputs": [
+        {
+          "Value": "Ana",
+          "ValueType": "Text"
+        },
+        {
+          "Value": "Medellin",
+          "ValueType": "Text"
+        }
+      ],
+      "TutorialSteps": [
+        {
+          "Title": "Leer espera una respuesta",
+          "Body": "`Leer` detiene el programa y espera a que alguien escriba. Lo que se escriba se guarda en la variable que aparece detras.\n\n- `Definir nombre Como Cadena` prepara la variable: le dice que va a guardar texto.\n- `Leer nombre` recibe la respuesta.\n- `Escribir \"Hola, \", nombre, \"!\"` la muestra usando la coma como separador.\n\nOjo con el espacio final de `\"Hola, \"`: sin el, el saludo saldria pegado.",
+          "Task": "Ejecuta y despues responde con otro nombre cualquiera.",
+          "CodeSnippet": "Proceso PreguntarNombre\n\tDefinir nombre Como Cadena\n\tLeer nombre\n\tEscribir \"Hola, \", nombre, \"!\"\nFinProceso\n",
+          "ExpectedOutput": "Hola, Ana!",
+          "Tip": "Si escribes Ana y sale Hola,  Ana! te falta el espacio final en el primer texto."
+        },
+        {
+          "Title": "Definir declara el tipo",
+          "Body": "`Definir` no es un adorno: le dice a PSeint que tipo de dato va a guardarse.\n\n- `Entero` para numeros sin decimales.\n- `Real` para numeros con decimales.\n- `Cadena` para texto.\n- `Logico` para Verdadero o Falso.\n\nAsi el programa sabe como convertir lo que escribe la persona y avisa antes de continuar si el dato no encaja.",
+          "Task": "Cambia Entero por Real y vuelve a ejecutar con 20: fíjate en el .0 final.",
+          "CodeSnippet": "Proceso Tipos\n\tDefinir nombre Como Cadena\n\tDefinir anios Como Entero\n\tLeer nombre\n\tLeer anios\n\tEscribir nombre, \" nacio hace \", anios, \" años\"\nFinProceso\n",
+          "ExpectedOutput": "Luis nacio hace 20 años",
+          "Tip": "Un Real con valor entero se muestra 20.0. Asi se ve por que conviene Entero."
+        },
+        {
+          "Title": "El orden de las preguntas",
+          "Body": "Cada `Leer` se queda con **la siguiente respuesta**, en el mismo orden en que aparecen en el codigo. Por eso el primer `Leer` es la primera pregunta que ve la persona.\n\nSi cambias el orden de las lineas, tambien cambia el orden en el que se leen los datos: por eso las variables tienen que seguir correspondiendo con su respuesta.",
+          "Task": "Intercambia las dos lineas Leer y responde de nuevo: los datos se cruzan.",
+          "CodeSnippet": "Proceso Orden\n\tDefinir primero Como Cadena\n\tDefinir segundo Como Cadena\n\tLeer primero\n\tLeer segundo\n\tEscribir \"1: \", primero\n\tEscribir \"2: \", segundo\nFinProceso\n",
+          "ExpectedOutput": "1: Ana\n2: Medellin",
+          "Tip": "Puedes escribir los dos Leer en una sola linea: Leer primero, segundo."
+        },
+        {
+          "Title": "Reto: tu presentacion",
+          "Body": "Escribe un programa que lea el nombre y la ciudad de la persona y muestre exactamente estas dos lineas:\n\n```\nHola, Ana\nBienvenido a PS Academy desde Medellin\n```\n\nLos valores de ejemplo son los que veras en la consola; con otros datos el programa cambia la primera linea y el final de la segunda.",
+          "Task": "Muestra las dos lineas usando el nombre y la ciudad leidos.",
+          "CodeSnippet": "Proceso Presentacion\n\tDefinir nombre Como Cadena\n\tDefinir ciudad Como Cadena\n\tLeer nombre\n\tLeer ciudad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Bienvenido a PS Academy desde \", ciudad\nFinProceso\n",
+          "ExpectedOutput": "Hola, Ana\nBienvenido a PS Academy desde Medellin",
+          "Tip": "El segundo Escribir lleva texto fijo al principio y al final, y la ciudad en medio."
+        }
+      ],
+      "Templates": [
+        {
+          "LanguageSlug": "python",
+          "StarterCode": "# Lee el nombre y la ciudad (pista: input())\n# y muestra las dos lineas que pide el enunciado.\nnombre = input()\nciudad = input()\n"
+        },
+        {
+          "LanguageSlug": "java",
+          "StarterCode": "import java.util.Scanner;\n\npublic class Main {\n\n    static Scanner sc = new Scanner(System.in);\n\n    public static void main(String[] args) {\n        String nombre = sc.nextLine();\n        String ciudad = sc.nextLine();\n        // Muestra aqui las dos lineas que pide el enunciado.\n    }\n}\n"
+        },
+        {
+          "LanguageSlug": "pseint",
+          "StarterCode": "Proceso Presentacion\n\tDefinir nombre Como Cadena\n\tDefinir ciudad Como Cadena\n\tLeer nombre\n\tLeer ciudad\n\t// Muestra aqui las dos lineas que pide el enunciado.\nFinProceso\n"
+        }
+      ]
+    },
+    {
+      "Category": "Tutorial",
+      "Title": "Variables: cajas con nombre",
+      "Description": "Una variable es una caja con nombre. Le guardas un valor, luego puedes leerlo, sumarlo o cambiarlo tantas veces como quieras.\n\nEn esta leccion ves como se declara, como se le guarda un valor con la flecha `<-` y como se usan varias variables juntas en una cuenta.\n\nLas variables son el alma de la programacion: sin ellas, un programa solo puede repetir lo mismo que esta escrito.",
+      "Difficulty": "Easy",
+      "ExpectedOutput": "19",
+      "IsActive": true,
+      "Inputs": [],
+      "TutorialSteps": [
+        {
+          "Title": "Crear una variable y guardarle un valor",
+          "Body": "Hay dos pasos que conviene no mezclar:\n\n- `Definir edad Como Entero` **crea** la caja y dice que guarda un numero entero.\n- `edad <- 15` **guarda** el valor 15 dentro.\n\nDespues, `Escribir edad` muestra lo que hay dentro. Cuando escribes el nombre de la variable, sin comillas, el ordenador busca que hay dentro.",
+          "Task": "Cambia el 15 por otro numero y ejecuta: la salida cambia sin tocar nada mas.",
+          "CodeSnippet": "Proceso Variables\n\tDefinir edad Como Entero\n\tedad <- 15\n\tEscribir edad\nFinProceso\n",
+          "ExpectedOutput": "15",
+          "Tip": "Si escribes Escribir \"edad\" saldra la palabra edad, no su valor."
+        },
+        {
+          "Title": "La flecha guarda, el igual compara",
+          "Body": "La flecha `<-` se lee como un **empuja**: lo de la derecha entra en la caja de la izquierda.\n\nPor eso `precio <- precio + 50` funciona: primero calcula el precio + 50 y despues guarda ese resultado en la misma variable. El valor anterior se reemplaza.\n\nEl signo `=` sirve para comparar, no para guardar. Ya lo veras en las condicionales.",
+          "Task": "Anade una linea mas que reste 200 y comprueba el nuevo precio.",
+          "CodeSnippet": "Proceso LaFlecha\n\tDefinir precio Como Entero\n\tprecio <- 1250\n\tprecio <- precio + 50\n\tEscribir precio\nFinProceso\n",
+          "ExpectedOutput": "1300",
+          "Tip": "El orden importa: guarda primero, despues opera sobre lo guardado."
+        },
+        {
+          "Title": "Dos variables en la misma cuenta",
+          "Body": "Aqui es donde las variables empiezan a ahorrar trabajo: en vez de escribir 1300 * 4 en el papel, guardamos cada dato con su nombre.\n\n`Escribir precio * cantidad` usa las dos variables, hace la cuenta y muestra solo el resultado. Si mañana el precio cambia, no tocas la cuenta.",
+          "Task": "Cambia la cantidad a 5 y ejecuta otra vez.",
+          "CodeSnippet": "Proceso Calculo\n\tDefinir precio Como Entero\n\tDefinir cantidad Como Entero\n\tprecio <- 1300\n\tcantidad <- 4\n\tEscribir precio * cantidad\nFinProceso\n",
+          "ExpectedOutput": "5200",
+          "Tip": "Los nombres de variable se escriben sin comillas y sin tildes."
+        },
+        {
+          "Title": "Reto: suma de notas",
+          "Body": "Crea tres variables `nota1`, `nota2` y `nota3`, guardales los valores 4, 8 y 7, y muestra su suma:\n\n```\n19\n```\n\nEl enunciado pide el resultado en una sola linea, asi que tambien hace falta una sola linea de Escribir.",
+          "Task": "Muestra 19 usando las tres variables.",
+          "CodeSnippet": "Proceso SumaNotas\n\tDefinir nota1 Como Entero\n\tDefinir nota2 Como Entero\n\tDefinir nota3 Como Entero\n\tnota1 <- 4\n\tnota2 <- 8\n\tnota3 <- 7\n\tEscribir nota1 + nota2 + nota3\nFinProceso\n",
+          "ExpectedOutput": "19",
+          "Tip": "Un Escribir con tres variables sumadas entre si: Escribir nota1 + nota2 + nota3."
+        }
+      ],
+      "Templates": [
+        {
+          "LanguageSlug": "python",
+          "StarterCode": "# Declara tres notas (4, 8 y 7) y muestra su suma.\n# Pista: una variable es un nombre y un valor, por ejemplo precio = 1250.\n"
+        },
+        {
+          "LanguageSlug": "java",
+          "StarterCode": "import java.util.Scanner;\n\npublic class Main {\n\n    static Scanner sc = new Scanner(System.in);\n\n    public static void main(String[] args) {\n        // Declara aqui las tres notas y muestra su suma.\n    }\n}\n"
+        },
+        {
+          "LanguageSlug": "pseint",
+          "StarterCode": "Proceso SumaNotas\n\tDefinir nota1 Como Entero\n\t// Declara nota2 y nota3, guardales 8 y 7, y muestra la suma.\nFinProceso\n"
+        }
+      ]
+    },
+    {
+      "Category": "Tutorial",
+      "Title": "Combinar: leer, calcular e imprimir",
+      "Description": "Ya sabes pedir un dato, guardarlo en una variable y mostrar un resultado. Este es precisamente el esqueleto de un programa.\n\nEn esta leccion los tres ingredientes a la vez: leer, operar con `+ - * /` e imprimir el resultado. Al final dareas con un programa de verdad: el promedio de dos notas.",
+      "Difficulty": "Easy",
+      "ExpectedOutput": "25\n50",
+      "IsActive": true,
+      "Inputs": [
+        {
+          "Value": "12",
+          "ValueType": "Number"
+        },
+        {
+          "Value": "8",
+          "ValueType": "Number"
+        },
+        {
+          "Value": "5",
+          "ValueType": "Number"
+        }
+      ],
+      "TutorialSteps": [
+        {
+          "Title": "Pedir dos numeros y sumarlos",
+          "Body": "Este es el programa mas frecuente de la programacion: pedir dos datos, sumarlos y mostrar el resultado.\n\nFijate en el orden: primero las dos variables, despues los dos `Leer`, y al final el `Escribir` con la cuenta. Cada dato se guarda en la variable correcta.",
+          "Task": "Ejecuta con 15 y 25. Despues prueba con otros dos numeros.",
+          "CodeSnippet": "Proceso DosNumeros\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tLeer a\n\tLeer b\n\tEscribir a + b\nFinProceso\n",
+          "ExpectedOutput": "40",
+          "Tip": "Sin Definir tambien funciona, pero declararlas documenta el tipo y evita errores."
+        },
+        {
+          "Title": "Los cuatro operadores",
+          "Body": "- `+` suma\n- `-` resta\n- `*` multiplica\n- `/` divide\n\nSobre el signo de la division hay que tener cuidado: si divides dos enteros y el resultado no es exacto, `Trunc(...)` se queda con la parte entera (10 entre 3 son 3, no 3 con decimales). Asi el resultado es el mismo que en la division en la escuela.",
+          "Task": "Cambia a <- 12 por a <- 20 y ejecuta: los cuatro resultados cambian.",
+          "CodeSnippet": "Proceso Operadores\n\tDefinir a Como Entero\n\ta <- 12\n\tEscribir a + 3\n\tEscribir a - 3\n\tEscribir a * 3\n\tEscribir Trunc(a / 3)\nFinProceso\n",
+          "ExpectedOutput": "15\n9\n36\n4",
+          "Tip": "Los parentesis mandan: Escribir (a + b) * 2 no es lo mismo que Escribir a + b * 2."
+        },
+        {
+          "Title": "Un programa completo",
+          "Body": "Aqui juntas texto y numeros en el mismo `Escribir`. La coma separa las partes y el ordenador las pega sin dejar espacios, asi que los textos fijos llevan el espacio justo donde lo necesitas.\n\n`Trunc((nota1 + nota2) / 2)` calcula el promedio sin los decimales, que es justo lo que se espera de una nota.",
+          "Task": "Ejecuta con Ana, 8 y 6. Luego prueba con otras dos notas.",
+          "CodeSnippet": "Proceso Promedio\n\tDefinir nombre Como Cadena\n\tDefinir nota1 Como Entero\n\tDefinir nota2 Como Entero\n\tLeer nombre\n\tLeer nota1\n\tLeer nota2\n\tEscribir nombre, \" obtuvo \", Trunc((nota1 + nota2) / 2), \" puntos\"\nFinProceso\n",
+          "ExpectedOutput": "Ana obtuvo 7 puntos",
+          "Tip": "Si sale Ana obtuvo 7.0 puntos, el problema es que nota1 se guarde como Real."
+        },
+        {
+          "Title": "Reto: total y doble",
+          "Body": "Lee tres numeros enteros y muestra dos lineas: su suma y el doble de esa suma.\n\n```\n25\n50\n```\n\nPuedes calcular la suma dos veces en los dos Escribir: el ordenador la resuelve al instante.",
+          "Task": "Muestra la suma y el doble, cada uno en su linea.",
+          "CodeSnippet": "Proceso SumaTotal\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tDefinir c Como Entero\n\tLeer a\n\tLeer b\n\tLeer c\n\tEscribir a + b + c\n\tEscribir (a + b + c) * 2\nFinProceso\n",
+          "ExpectedOutput": "25\n50",
+          "Tip": "El doble de la suma necesita parentesis: (a + b + c) * 2."
+        }
+      ],
+      "Templates": [
+        {
+          "LanguageSlug": "python",
+          "StarterCode": "# Lee los tres numeros (pista: int(input()))\na = int(input())\nb = int(input())\nc = int(input())\n# Muestra la suma y despues el doble de la suma.\n"
+        },
+        {
+          "LanguageSlug": "java",
+          "StarterCode": "import java.util.Scanner;\n\npublic class Main {\n\n    static Scanner sc = new Scanner(System.in);\n\n    public static void main(String[] args) {\n        int a = sc.nextInt();\n        int b = sc.nextInt();\n        int c = sc.nextInt();\n        // Muestra aqui la suma y despues el doble de la suma.\n    }\n}\n"
+        },
+        {
+          "LanguageSlug": "pseint",
+          "StarterCode": "Proceso SumaTotal\n\tDefinir a Como Entero\n\tDefinir b Como Entero\n\tDefinir c Como Entero\n\tLeer a\n\tLeer b\n\tLeer c\n\t// Muestra aqui la suma y despues el doble de la suma.\nFinProceso\n"
+        }
+      ]
+    },
+    {
+      "Category": "Tutorial",
+      "Title": "Ya estas listo para empezar tu camino",
+      "Description": "Ultima leccion del tutorial: un repaso rapido de todo lo visto y un primer programa completo hecho por ti.\n\nSi has llegado aqui ya sabes declarar una variable, pedir un dato con `Leer`, guardarlo y mostrarlo con `Escribir`. Ese es el esqueleto de **todos** los ejercicios del curso.\n\nCuando superes el reto, el siguiente paso son los ejercicios de secuenciales: empezaran a pedirte cosas, pero nada que no sepas ya hacer.",
+      "Difficulty": "Easy",
+      "ExpectedOutput": "Hola, Ana\nTienes 15 años",
+      "IsActive": true,
+      "Inputs": [
+        {
+          "Value": "Ana",
+          "ValueType": "Text"
+        },
+        {
+          "Value": "15",
+          "ValueType": "Number"
+        }
+      ],
+      "TutorialSteps": [
+        {
+          "Title": "Repaso: imprimir mensajes",
+          "Body": "Antes de pedir nada, recuerda como se imprime: `Escribir` con el texto entre comillas.\n\nTambien puedes guardar un texto en una variable de tipo `Cadena` y usarla despues, como hace este paso. Las dos formas sirven; la primera es mas corta y la segunda mas comoda si el texto se repite.",
+          "Task": "Ejecuta el programa y despues cambia el texto que aparece.",
+          "CodeSnippet": "Proceso Repaso1\n\tDefinir mensaje Como Cadena\n\tmensaje <- \"Bienvenido\"\n\tEscribir mensaje, \" a PS Academy\"\n\tEscribir \"Este programa solo muestra texto.\"\nFinProceso\n",
+          "ExpectedOutput": "Bienvenido a PS Academy\nEste programa solo muestra texto.",
+          "Tip": "Sin Leer ni variables complicadas: aqui solo hay Escribir."
+        },
+        {
+          "Title": "Repaso: leer datos",
+          "Body": "`Leer` se encarga de la parte aburrida: esperar a que la persona escriba.\n\nEl programa no avanza hasta que hay una respuesta, y cada `Leer` se lleva una linea de lo que se escribio. Esa respuesta queda guardada en la variable indicada, lista para usarla cuando quieras.",
+          "Task": "Ejecuta y responde con un nombre y una ciudad distintos.",
+          "CodeSnippet": "Proceso Repaso2\n\tDefinir nombre Como Cadena\n\tDefinir ciudad Como Cadena\n\tLeer nombre\n\tLeer ciudad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Bienvenido a \", ciudad\nFinProceso\n",
+          "ExpectedOutput": "Hola, Ana\nBienvenido a Medellin",
+          "Tip": "Dos Leer, dos lineas de respuesta: la primera para nombre y la segunda para ciudad."
+        },
+        {
+          "Title": "Repaso: calcular con lo leido",
+          "Body": "Cuando el dato leido es un numero, se declara como `Entero` y se puede operar con el.\n\nAqui el programa calcula la edad que tendra el ano que viene. Es el primer ejercicio donde el resultado depende de algo que escribio la persona, y tambien donde se ve que una variable puede guardar el resultado de una cuenta.",
+          "Task": "Ejecuta con otra edad y comprueba como cambia el calculo.",
+          "CodeSnippet": "Proceso Repaso3\n\tDefinir nombre Como Cadena\n\tDefinir edad Como Entero\n\tDefinir edadProxima Como Entero\n\tLeer nombre\n\tLeer edad\n\tedadProxima <- edad + 1\n\tEscribir nombre, \" cumple \", edad, \" años\"\n\tEscribir \"El año que viene cumplir \", edadProxima\nFinProceso\n",
+          "ExpectedOutput": "Ana cumple 15 años\nEl año que viene cumplir 16",
+          "Tip": "La flecha guarda el resultado de la cuenta en edadProxima, que luego se muestra."
+        },
+        {
+          "Title": "Ya estas listo para empezar tu camino",
+          "Body": "En una sola leccion has aprendido a escribir un programa completo: declarar variables, pedir datos, guardarlos y mostrar resultados.\n\nEso es **todo** lo que necesita un programa secuencial. A partir de aqui los ejercicios ya no te ensenan comandos nuevos: te dan un problema y tu escribes el codigo.\n\nCuando superes este paso, se desbloqueara el siguiente bloque del curso (Fundamentos, donde empiezan los ejercicios de secuenciales). Mucho animo, y a escribir codigo.",
+          "Task": "Reune todo lo aprendido en un programa que imprima los dos saludos.",
+          "CodeSnippet": "Proceso MiPrimerProgramaCompleto\n\tDefinir nombre Como Cadena\n\tDefinir edad Como Entero\n\tLeer nombre\n\tLeer edad\n\tEscribir \"Hola, \", nombre\n\tEscribir \"Tienes \", edad, \" años\"\nFinProceso\n",
+          "ExpectedOutput": "Hola, Ana\nTienes 15 años",
+          "Tip": "Es el mismo esquema del paso anterior: definir, leer, calcular si hace falta y escribir."
+        }
+      ],
+      "Templates": [
+        {
+          "LanguageSlug": "python",
+          "StarterCode": "# Lee el nombre y la edad, y muestra los dos saludos del enunciado.\nnombre = input()\nedad = input()\n# Pista: convierte la edad con int() para poder sumarla.\n"
+        },
+        {
+          "LanguageSlug": "java",
+          "StarterCode": "import java.util.Scanner;\n\npublic class Main {\n\n    static Scanner sc = new Scanner(System.in);\n\n    public static void main(String[] args) {\n        String nombre = sc.nextLine();\n        int edad = sc.nextInt();\n        // Muestra aqui los dos saludos del enunciado.\n    }\n}\n"
+        },
+        {
+          "LanguageSlug": "pseint",
+          "StarterCode": "Proceso MiPrimerProgramaCompleto\n\tDefinir nombre Como Cadena\n\t// Lee la edad y muestra los dos saludos del enunciado.\nFinProceso\n"
         }
       ]
     }
