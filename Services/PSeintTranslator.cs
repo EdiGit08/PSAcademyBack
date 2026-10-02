@@ -372,10 +372,14 @@ public static class PSeintTranslator
         expression = Regex.Replace(expression, @"(?<![<>=!])=(?!=)", "==");
         expression = expression.Replace("^", "**");
 
-        expression = Regex.Replace(expression, @"\bNo\b", "not", RegexOptions.IgnoreCase);
-        expression = Regex.Replace(expression, @"\bY\b", "and", RegexOptions.IgnoreCase);
-        expression = Regex.Replace(expression, @"\bO\b", "or", RegexOptions.IgnoreCase);
-        expression = Regex.Replace(expression, @"\bMod\b", "%", RegexOptions.IgnoreCase);
+        // Los operadores logicos se distinguen por mayuscula a proposito: en PSeint se
+        // escriben en mayuscula (Si a > 0 Y b < 10) y, sin distinguir mayusculas, una
+        // variable llamada 'y' se convertiria en 'and' (x + y -> x + and). Solo la
+        // forma en mayuscula puede ser el operador.
+        expression = Regex.Replace(expression, @"\bNo\b", "not");
+        expression = Regex.Replace(expression, @"\bY\b", "and");
+        expression = Regex.Replace(expression, @"\bO\b", "or");
+        expression = Regex.Replace(expression, @"\bMod\b", "%");
         expression = Regex.Replace(expression, @"\bVerdadero\b", "True", RegexOptions.IgnoreCase);
         expression = Regex.Replace(expression, @"\bFalso\b", "False", RegexOptions.IgnoreCase);
 

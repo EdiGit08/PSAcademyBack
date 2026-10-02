@@ -20,4 +20,16 @@
     </PackageReference>
   </ItemGroup>
 
+  <!--
+    "tools/" contiene utilidades de consola y scripts de contenido, no codigo del
+    ejecutor web. El SDK incluye por defecto todos los .cs del directorio del
+    proyecto, asi que sin esta exclusion el Program.cs de tools/pseint-tool se
+    compilaria dentro de la API y chocaria con su punto de entrada.
+  -->
+  <ItemGroup>
+    <Compile Remove="tools/**/*.cs" />
+    <Content Remove="tools/**" />
+    <None Remove="tools/**" />
+  </ItemGroup>
+
 </Project>
