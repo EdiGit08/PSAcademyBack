@@ -117,7 +117,7 @@ builder.Services.Configure<PistonOptions>(builder.Configuration.GetSection(Pisto
 builder.Services.AddHttpClient<IPistonExecutionService, PistonExecutionService>((serviceProvider, client) =>
 {
     var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<PistonOptions>>().Value;
-    client.BaseAddress = new Uri(options.BaseUrl, UriKind.Absolute);
+    client.BaseAddress = new Uri(options.NormalizedBaseUrl, UriKind.Absolute);
 
     // La cancelación del servicio (TimeoutSeconds + 10s) debe dispararse antes que
     // esta, para devolver un 502 con mensaje en lugar de una TaskCanceledException.

@@ -10,8 +10,28 @@ public class PistonOptions
     /// En desarrollo apunta al contenedor local definido en docker-compose.yml.
     /// En producción DEBE sobrescribirse con "Piston__BaseUrl": una instancia
     /// propia (VPS) o la instancia pública con clave autorizada.
+    ///
+    /// La barra final es obligatoria en la práctica: las llamadas se hacen con
+    /// "execute" como ruta relativa, y System.Uri descarta el último segmento
+    /// cuando la base no termina en "/". Sin ella, ".../api/v2" se resuelve a
+    /// ".../api/execute" y Piston responde 404, que el cliente ve como un 502
+    /// confuso. Se añade aquí para que un descuido al escribir la variable de
+    /// entorno no rompa la ejecución de código.
     /// </summary>
-    public string BaseUrl { get; set; } = "https://emkc.org/api/v2/piston/";
+    public string BaseUrl
+    {
+        get => _baseUrl;
+        set => _baseUrl = value?.Trim() ?? string.Empty;
+    }
+
+    private string _baseUrl = "https://emkc.org/api/v2/piston/";
+
+    /// <summary>
+    /// Instancia Piston ya normalizada: sin espacios y con la barra final, que es
+    /// como se la pasa a <see cref="HttpClient.BaseAddress"/>.
+    /// </summary>
+    public string NormalizedBaseUrl =>
+        BaseUrl.EndsWith('/') ? BaseUrl : $"{BaseUrl}/";
 
     /// <summary>
     /// Clave de autorización para instancias que la exigen.
