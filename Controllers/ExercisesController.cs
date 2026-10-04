@@ -20,13 +20,13 @@ public class ExercisesController : ControllerBase
 
     private readonly ApplicationDbContext _dbContext;
     private readonly IPistonExecutionService _pistonExecutionService;
-    private readonly ExerciseGradingService _gradingService;
+    private readonly IExerciseGradingService _gradingService;
     private readonly ILogger<ExercisesController> _logger;
 
     public ExercisesController(
         ApplicationDbContext dbContext,
         IPistonExecutionService pistonExecutionService,
-        ExerciseGradingService gradingService,
+        IExerciseGradingService gradingService,
         ILogger<ExercisesController> logger)
     {
         _dbContext = dbContext;

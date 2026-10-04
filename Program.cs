@@ -344,19 +344,15 @@ static bool IsLoopbackPiston(string? baseUrl)
 // Debe ir antes de todo lo demás: sin esto Request.IsHttps es false porque Render
 // termina TLS y reenvía HTTP, y UseHttpsRedirection devolvería un 307 hacia una
 // URL que el navegador vuelve a pedir por HTTP (bucle de redirección).
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+var forwardedOptions = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-
-    // Render rota las IPs del proxy entre despliegues, asi que no se puede fijar
-    // una lista de proxies de confianza: el balanceador ya garantiza que solo él
-    // alcanza el contenedor. Aceptar cabeceras sin lista restringe la superficie
-    // a conexiones que no llegan desde Internet, que es exactamente este caso.
-    ForwardLimit = null,
-    KnownNetworks = { },
-    KnownProxies = { }
-});
-
+    ForwardLimit = null
+};
+// Vaciar de verdad las listas: `= { }` no borra los valores por defecto (solo loopback).
+forwardedOptions.KnownNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedOptions);
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
