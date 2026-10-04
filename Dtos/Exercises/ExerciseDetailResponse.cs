@@ -20,20 +20,18 @@ public class ExerciseDetailResponse
 
     public string? UserStatus { get; set; }
 
+    /// <summary>
+    /// Justificación del admin cuando devolvió el último envío. Es null en cualquier
+    /// otro estado, y el frontend solo la muestra si viene informada.
+    /// </summary>
+    public string? Feedback { get; set; }
+
     public List<ExerciseTemplateResponse> Templates { get; set; } = new();
 
     /// <summary>Valores de entrada que el programa recibirá por stdin, en orden.</summary>
     public List<ExerciseInputResponse> Inputs { get; set; } = new();
 
-    /// <summary>
-    /// Código guardado por el alumno, por lenguaje. Solo se rellena con JWT válido;
-    /// permite continuar donde se dejó aunque no se haya ejecutado.
-    /// </summary>
     public List<ExerciseDraftResponse> Drafts { get; set; } = new();
 
-    /// <summary>
-    /// Pasos del tutorial, en orden. Vacio en los ejercicios que no son de tutorial:
-    /// la categoria es la que decide si la pagina /tutorial tiene algo que mostrar.
-    /// </summary>
     public List<TutorialStepResponse> TutorialSteps { get; set; } = new();
 }

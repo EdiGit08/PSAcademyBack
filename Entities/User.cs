@@ -17,4 +17,10 @@ public class User
     public ICollection<UserProgress> Progress { get; set; } = new List<UserProgress>();
 
     public ICollection<UserCodeDraft> Drafts { get; set; } = new List<UserCodeDraft>();
+
+    public ICollection<Submission> Submissions { get; set; } = new List<Submission>();
+
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

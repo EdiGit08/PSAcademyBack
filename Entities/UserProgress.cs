@@ -23,5 +23,7 @@ public class UserProgress
 
     public Language? LastSubmittedLanguage { get; set; }
 
+    public string? Feedback { get; set; }
+
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

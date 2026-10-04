@@ -110,6 +110,9 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(nameof(UserRole.Admin)));
 });
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IExerciseGradingService, ExerciseGradingService>();
 
 // ----------------------------------------------------------------- Piston
 
@@ -195,19 +198,24 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicy, policy =>
     {
+        // `X-Unread-Count` va expuesta porque la SPA lee el contador de notificaciones no
+        // leidas de esa cabecera: sin WithExposedHeaders el navegador la oculta y el
+        // contador llega siempre a 0, con la campana en cero aunque haya avisos.
+        var exposedHeaders = new[] { "Content-Disposition", "X-Unread-Count" };
+
         if (allowedOrigins.Length > 0)
         {
             policy.WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("Content-Disposition");
+                .WithExposedHeaders(exposedHeaders);
         }
         else
         {
             policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("Content-Disposition");
+                .WithExposedHeaders(exposedHeaders);
         }
     });
 });

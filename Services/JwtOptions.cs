@@ -15,4 +15,6 @@ public class JwtOptions
     public string? SecretKey { get; set; }
 
     public int ExpirationMinutes { get; set; } = 60;
+
+    public int RefreshTokenExpirationDays { get; set; } = 14;
 }

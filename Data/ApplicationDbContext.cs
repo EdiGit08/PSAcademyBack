@@ -20,6 +20,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserProgress> UserProgress => Set<UserProgress>();
     public DbSet<UserCodeDraft> UserCodeDrafts => Set<UserCodeDraft>();
     public DbSet<TutorialStep> TutorialSteps => Set<TutorialStep>();
+    public DbSet<Submission> Submissions => Set<Submission>();
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,6 +129,11 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.LastSubmittedLanguageId).HasColumnName("last_submitted_language_id");
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasColumnType("timestamp with time zone");
 
+            // Justificacion del admin cuando devuelve el envio. El progreso es lo que el
+            // alumno ve al reabrir el ejercicio, asi que la ultima devolucion queda aqui
+            // ademas de en la tabla de envios.
+            entity.Property(e => e.Feedback).HasColumnName("feedback");
+
             entity.HasIndex(e => new { e.UserId, e.ExerciseId })
                   .IsUnique()
                   .HasDatabaseName("ix_user_progress_user_id_exercise_id");
@@ -223,6 +231,94 @@ public class ApplicationDbContext : DbContext
                   .WithMany(x => x.TutorialSteps)
                   .HasForeignKey(e => e.ExerciseId)
                   .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<Submission>(entity =>
+        {
+            entity.ToTable("submissions");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ExerciseId).HasColumnName("exercise_id");
+            entity.Property(e => e.LanguageId).HasColumnName("language_id");
+            entity.Property(e => e.Code).HasColumnName("code").IsRequired();
+            entity.Property(e => e.ActualOutput).HasColumnName("actual_output").IsRequired();
+            entity.Property(e => e.ExpectedOutput).HasColumnName("expected_output").IsRequired();
+            entity.Property(e => e.Status).HasColumnName("status").HasConversion(LowerCase<PSAcademyBack.Enums.SubmissionStatus>()).HasMaxLength(20);
+            entity.Property(e => e.Feedback).HasColumnName("feedback");
+            entity.Property(e => e.GradedById).HasColumnName("graded_by_id");
+            entity.Property(e => e.SubmittedAt).HasColumnName("submitted_at").HasColumnType("timestamp with time zone");
+            entity.Property(e => e.GradedAt).HasColumnName("graded_at").HasColumnType("timestamp with time zone");
+
+            entity.HasIndex(e => new { e.UserId, e.ExerciseId, e.Status }).HasDatabaseName("ix_submissions_user_exercise_status");
+            entity.HasIndex(e => e.Status).HasDatabaseName("ix_submissions_status");
+
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.Submissions)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Exercise)
+                  .WithMany()
+                  .HasForeignKey(e => e.ExerciseId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Language)
+                  .WithMany()
+                  .HasForeignKey(e => e.LanguageId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.GradedBy)
+                  .WithMany()
+                  .HasForeignKey(e => e.GradedById)
+                  .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.ToTable("notifications");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Type).HasColumnName("type").HasConversion<string>().HasMaxLength(40);
+            entity.Property(e => e.Title).HasColumnName("title").HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Message).HasColumnName("message").IsRequired();
+            entity.Property(e => e.Data).HasColumnName("data");
+            entity.Property(e => e.IsRead).HasColumnName("is_read").HasDefaultValue(false);
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp with time zone");
+
+            entity.HasIndex(e => new { e.UserId, e.IsRead }).HasDatabaseName("ix_notifications_user_read");
+            entity.HasIndex(e => e.CreatedAt).HasDatabaseName("ix_notifications_created_at");
+
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.Notifications)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.ToTable("refresh_tokens");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.TokenHash).HasColumnName("token_hash").HasMaxLength(64).IsRequired();
+            entity.Property(e => e.ExpiresAtUtc).HasColumnName("expires_at_utc").HasColumnType("timestamp with time zone");
+            entity.Property(e => e.CreatedAtUtc).HasColumnName("created_at_utc").HasColumnType("timestamp with time zone");
+            entity.Property(e => e.IsRevoked).HasColumnName("is_revoked").HasDefaultValue(false);
+            entity.Property(e => e.RevokedAtUtc).HasColumnName("revoked_at_utc").HasColumnType("timestamp with time zone");
+
+            entity.HasIndex(e => e.TokenHash).IsUnique().HasDatabaseName("ix_refresh_tokens_token_hash");
+            entity.HasIndex(e => new { e.UserId, e.IsRevoked }).HasDatabaseName("ix_refresh_tokens_user_revoked");
+
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.RefreshTokens)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
         });
 
     }

@@ -79,11 +79,15 @@ services:
       - key: Jwt__Audience
         value: PSAcademyBackClient
 
-      # 60 minutos: es el limite de vida del token que el front guarda en
-      # localStorage. Al expirar, el interceptor de axios de la SPA limpia la sesion
-      # y redirige a /login.
+      # 60 minutos: es el limite de vida del token de acceso. La SPA lo renueva sola
+      # mientras el alumno trabaja, canjeando el refresh token, asi que seldomo se ve.
       - key: Jwt__ExpirationMinutes
         value: 60
+
+      # Refresh token: 14 dias. Es lo que mantiene viva la sesion entre visitas; al
+      # vencer, el alumno tiene que volver a entrar. Se rota en cada canje.
+      - key: Jwt__RefreshTokenExpirationDays
+        value: 14
 
       # ----------------------------------------------------------- Esquema
       # Se aplican migraciones y se siembran idiomas y categorias al arrancar.
